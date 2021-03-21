@@ -17,6 +17,7 @@ namespace OE_Proj_1.ViewModel
             set
             {
                 config.a = value;
+                //komentarz
                 //onPropertyChanged(nameof(a));
             }
         }
