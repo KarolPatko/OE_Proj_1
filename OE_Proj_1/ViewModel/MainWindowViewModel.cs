@@ -53,6 +53,39 @@ namespace OE_Proj_1.ViewModel
                 config.populationAmount = value;
             }
         }
+        public double bestPercentageOrTournamentAmount
+        {
+            get
+            {
+                return config.bestPercentageOrTournamentAmount;
+            }
+            set
+            {
+                config.bestPercentageOrTournamentAmount = value;
+            }
+        }
+        public double inversionPercentage
+        {
+            get
+            {
+                return config.inversionPercentage;
+            }
+            set
+            {
+                config.inversionPercentage = value;
+            }
+        }
+        public double eliteAmount
+        {
+            get
+            {
+                return config.eliteAmount;
+            }
+            set
+            {
+                config.eliteAmount = value;
+            }
+        }
         public double epochs
         {
             get
@@ -75,6 +108,17 @@ namespace OE_Proj_1.ViewModel
                 config.selection = value.Replace("System.Windows.Controls.ComboBoxItem: ", "");
             }
         }
+        public string mutation
+        {
+            get
+            {
+                return config.mutation;
+            }
+            set
+            {
+                config.mutation = value.Replace("System.Windows.Controls.ComboBoxItem: ", "");
+            }
+        }
         public string crossover
         {
             get
@@ -95,6 +139,17 @@ namespace OE_Proj_1.ViewModel
             set
             {
                 config.crossPercentage = value;
+            }
+        }
+        public double mutationPercentage
+        {
+            get
+            {
+                return config.mutationPercentage;
+            }
+            set
+            {
+                config.mutationPercentage = value;
             }
         }
 

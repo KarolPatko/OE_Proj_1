@@ -16,7 +16,7 @@
         <TextBox HorizontalAlignment="Left" Height="23" Margin="170,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding Path=numberOfBits}"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="170,97,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding Path=populationAmount}"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="170,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding Path=epochs}"/>
-        <ComboBox HorizontalAlignment="Left" Margin="170,187,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding selection}">
+        <ComboBox HorizontalAlignment="Left" Margin="161,319,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding selection}">
             <ComboBoxItem Content="BEST"></ComboBoxItem>
             <ComboBoxItem Content="ROULETTE"></ComboBoxItem>
             <ComboBoxItem Content="TOURNAMENT"></ComboBoxItem>
@@ -26,17 +26,32 @@
         <TextBlock HorizontalAlignment="Left" Margin="59,97,0,0" TextWrapping="Wrap" Text="Population amount" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="81,69,0,0" TextWrapping="Wrap" Text="Number of bits" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="59,126,0,0" TextWrapping="Wrap" Text="Number of epochs" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="68,187,0,0" TextWrapping="Wrap" Text="Selection method" VerticalAlignment="Top"/>
-        <Button Content="Calculate" HorizontalAlignment="Left" Margin="170,239,0,0" VerticalAlignment="Top" Width="75" Click="calculate"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="170,153,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding crossPercentage}"/>
-        <TextBlock HorizontalAlignment="Left" Margin="60,154,0,0" TextWrapping="Wrap" Text="Cross percentage" VerticalAlignment="Top"/>
-        <ComboBox HorizontalAlignment="Left" Margin="170,214,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding crossover}">
+        <TextBlock HorizontalAlignment="Left" Margin="59,319,0,0" TextWrapping="Wrap" Text="Selection method" VerticalAlignment="Top"/>
+        <Button Content="Calculate" HorizontalAlignment="Left" Margin="161,407,0,-6" VerticalAlignment="Top" Width="75" Click="calculate"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="169,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding crossPercentage}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="59,213,0,0" TextWrapping="Wrap" Text="Cross percentage" VerticalAlignment="Top"/>
+        <ComboBox HorizontalAlignment="Left" Margin="161,347,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding crossover}">
             <ComboBoxItem Content="ONE_POINT"/>
             <ComboBoxItem Content="TWO_POINT"/>
             <ComboBoxItem Content="THREE_POINT"/>
             <ComboBoxItem Content="HOMO"/>
         </ComboBox>
-        <TextBlock HorizontalAlignment="Left" Margin="68,221,0,0" TextWrapping="Wrap" Text="Crossover" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="59,354,0,0" TextWrapping="Wrap" Text="Crossover" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="169,245,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding mutationPercentage}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="49,246,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Mutation percentage"/>
+        <ComboBox HorizontalAlignment="Left" Margin="161,376,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding mutation}">
+            <ComboBoxItem Content="ONE_POINT"/>
+            <ComboBoxItem Content="TWO_POINT"/>
+            <ComboBoxItem Content="Brzegowa..."/>
+            <ComboBoxItem Content=""/>
+        </ComboBox>
+        <TextBlock HorizontalAlignment="Left" Margin="59,383,0,0" TextWrapping="Wrap" Text="Mutation" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="170,158,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding bestPercentageOrTournamentAmount}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,160,0,0" TextWrapping="Wrap" Text="Best % / Tournament amount" VerticalAlignment="Top" Width="155"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="169,275,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding inversionPercentage}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="49,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Inversion"/><Run Text=" percentage"/></TextBlock>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="170,179,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding eliteAmount}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="92,181,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="73"><Run Text="Elite "/><Run Text="amount"/></TextBlock>
 
     </Grid>
 </Window>

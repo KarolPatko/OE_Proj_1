@@ -13,10 +13,15 @@ namespace OE_Proj_1.Model
         public double b { get; set; }
         public double numberOfBits { get; set; }
         public double populationAmount { get; set; }
+        public double bestPercentageOrTournamentAmount { get; set; }
+        public double inversionPercentage { get; set; }
+        public double eliteAmount { get; set; }
         public double epochs { get; set; }
         public string selection { get; set; }
         public string crossover { get; set; }
+        public string mutation { get; set; }
         public double crossPercentage { get; set; }
+        public double mutationPercentage { get; set; }
 
         public static AlgorithmConfig Instance
         {

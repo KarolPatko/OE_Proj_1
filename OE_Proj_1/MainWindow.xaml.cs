@@ -54,6 +54,39 @@ namespace OE_Proj_1
                 config.populationAmount = value;
             }
         }
+        public double bestPercentageOrTournamentAmount
+        {
+            get
+            {
+                return config.bestPercentageOrTournamentAmount;
+            }
+            set
+            {
+                config.bestPercentageOrTournamentAmount = value;
+            }
+        }
+        public double eliteAmount
+        {
+            get
+            {
+                return config.eliteAmount;
+            }
+            set
+            {
+                config.eliteAmount = value;
+            }
+        }
+        public double inversionPercentage
+        {
+            get
+            {
+                return config.inversionPercentage;
+            }
+            set
+            {
+                config.inversionPercentage = value;
+            }
+        }
         public double epochs
         {
             get
@@ -74,6 +107,17 @@ namespace OE_Proj_1
             set
             {
                 config.selection = value.Replace("System.Windows.Controls.ComboBoxItem: ", "");
+            }
+        }
+        public string mutation
+        {
+            get
+            {
+                return config.mutation;
+            }
+            set
+            {
+                config.mutation = value.Replace("System.Windows.Controls.ComboBoxItem: ", "");
             }
         }
 
@@ -97,6 +141,17 @@ namespace OE_Proj_1
             set
             {
                 config.crossPercentage = value;
+            }
+        }
+        public double mutationPercentage
+        {
+            get
+            {
+                return config.mutationPercentage;
+            }
+            set
+            {
+                config.mutationPercentage = value;
             }
         }
         private Individual[] population;
