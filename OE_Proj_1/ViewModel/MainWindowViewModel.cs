@@ -1,34 +1,91 @@
-﻿using System.ComponentModel;
-using System;
+﻿using System;
 
 namespace OE_Proj_1.ViewModel
 {
 
     using Model;
+
     public class MainWindowViewModel// : INotifyPropertyChanged
     {
-        private AlgorithmConfig config = new AlgorithmConfig();
+        private AlgorithmConfig config = AlgorithmConfig.Instance;
 
-        /*        public double a
-                {
-                    get {
-                        return config.a;
-                    }
-                    set
-                    {
-                        config.a = value;
-                        //komentarz
-                        //onPropertyChanged(nameof(a));
-                    }
-                }*/
-        public double a { get; set; }
-        public double b { get; set; }
-        public double numberOfBits { get; set; }
-        public double populationAmount { get; set; }
-        public double epochs { get; set; }
-        public string selection { get; set; }
-
-        private Individual[] population;
+        public double a
+        {
+            get
+            {
+                return config.a;
+            }
+            set
+            {
+                config.a = value;
+            }
+        }
+        public double b
+        {
+            get
+            {
+                return config.b;
+            }
+            set
+            {
+                config.b = value;
+            }
+        }
+        public double numberOfBits
+        {
+            get
+            {
+                return config.numberOfBits;
+            }
+            set
+            {
+                config.numberOfBits = value;
+            }
+        }
+        public double populationAmount
+        {
+            get
+            {
+                return config.populationAmount;
+            }
+            set
+            {
+                config.populationAmount = value;
+            }
+        }
+        public double epochs
+        {
+            get
+            {
+                return config.epochs;
+            }
+            set
+            {
+                config.epochs = value;
+            }
+        }
+        public string selection
+        {
+            get
+            {
+                return config.selection;
+            }
+            set
+            {
+                config.selection = value.Replace("System.Windows.Controls.ComboBoxItem: ", "");
+            }
+        }
+        public double crossPercentage
+        {
+            get
+            {
+                return config.crossPercentage;
+            }
+            set
+            {
+                config.crossPercentage = value;
+            }
+        }
 
         /*        public event PropertyChangedEventHandler PropertyChanged;
 
@@ -40,56 +97,6 @@ namespace OE_Proj_1.ViewModel
                     }
                 }*/
 
-        
-        public void calculate()
-        {
-            initialize();
-            for(int i = 0; i < epochs; ++i)
-            {
-                doEvaluate();
-                doSelection();
-                doCrossover();
-                doMutatuion();
-            }
-        }
 
-        public void initialize()
-        {
-            population = new Individual[Convert.ToInt32(populationAmount)];
-        }
-
-        public void doEvaluate()
-        {
-
-        }
-
-        public void doSelection()
-        {
-            switch (selection)
-            {
-                case "BEST":
-                    return;
-                case "ROULETTE":
-                    return;
-                case "TOURNAMENT":
-                    return;
-            }
-        }
-
-        public void doCrossover()
-        {
-
-        }
-
-        public void doMutatuion()
-        {
-
-        }
-
-        public double f(double x, double y)
-        {
-            //MIN f(x,y)=-1,9133 (x, y)=(-0.54719, -0.54719)
-            return Math.Sin(x + y) + (x - y) * (x - y) - 1.5 * x + 2.5 * y + 1;
-        }
     }
 }

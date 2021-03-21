@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OE_Proj_1.Model;
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace OE_Proj_1
 {
@@ -20,9 +9,209 @@ namespace OE_Proj_1
     /// </summary>
     public partial class MainWindow : Window
     {
+        private AlgorithmConfig config = AlgorithmConfig.Instance;
+        public double a
+        {
+            get
+            {
+                return config.a;
+            }
+            set
+            {
+                config.a = value;
+            }
+        }
+        public double b
+        {
+            get
+            {
+                return config.b;
+            }
+            set
+            {
+                config.b = value;
+            }
+        }
+        public double numberOfBits
+        {
+            get
+            {
+                return config.numberOfBits;
+            }
+            set
+            {
+                config.numberOfBits = value;
+            }
+        }
+        public double populationAmount
+        {
+            get
+            {
+                return config.populationAmount;
+            }
+            set
+            {
+                config.populationAmount = value;
+            }
+        }
+        public double epochs
+        {
+            get
+            {
+                return config.epochs;
+            }
+            set
+            {
+                config.epochs = value;
+            }
+        }
+        public string selection
+        {
+            get
+            {
+                return config.selection;
+            }
+            set
+            {
+                config.selection = value.Replace("System.Windows.Controls.ComboBoxItem: ", "");
+            }
+        }
+        public double crossPercentage
+        {
+            get
+            {
+                return config.crossPercentage;
+            }
+            set
+            {
+                config.crossPercentage = value;
+            }
+        }
+        private Individual[] population;
+        private Individual[] populationToCross;
+        private static Random _random = new Random();
         public MainWindow()
         {
             InitializeComponent();
         }
+        
+        public void calculate(object sender, RoutedEventArgs e)
+        {
+            initialize();
+            for (int i = 0; i < epochs; ++i)
+            {
+                doEvaluate();
+                doSelection();
+                doCrossover();
+                doMutatuion();
+            }
+        }
+        public void initialize()
+        {
+            population = new Individual[Convert.ToInt32(populationAmount)];
+
+            for(int i = 0; i < populationAmount; ++i)
+            {
+                population[i] = new Individual(Convert.ToInt32(numberOfBits));
+            }
+        }
+
+        public void doEvaluate()
+        {
+            Array.ForEach(population, individual => individual.result = f(individual.chromosomeX, individual.chromosomeY));
+        }
+
+        public void doSelection()
+        {
+            switch (selection)
+            {
+                case "BEST":
+                    doBestSelection();
+                    break;
+                case "ROULETTE":
+                    doRouletteSelection();
+                    break;
+                case "TOURNAMENT":
+                    break;
+            }
+        }
+
+        public void doCrossover()
+        {
+
+        }
+
+        public void doMutatuion()
+        {
+
+        }
+
+        public void doBestSelection()
+        {
+            Array.Sort(population);
+            populationToCross = new Individual[Convert.ToInt32(population.Length * (crossPercentage / 100))];
+            for(int i = 0; i<population.Length * crossPercentage / 100; ++i)
+            {
+                populationToCross[i] = population[i];
+            }
+        }
+
+        public void doRouletteSelection()
+        {
+            shufflePopulation();
+            populationToCross = new Individual[Convert.ToInt32(Math.Ceiling(population.Length/crossPercentage))];
+            int populationToCrossIncrement = 0;
+            Individual min;
+            for (int i = 0; i < population.Length; i += Convert.ToInt32(crossPercentage))
+            {
+                min = population[i];
+
+                for(int j = i+1; j < population.Length && j < i+ Convert.ToInt32(crossPercentage); ++j)
+                {
+                    if(min.result < population[j].result)
+                    {
+                        min = population[j];
+                    }
+                }
+
+                populationToCross[populationToCrossIncrement] = min;
+                ++populationToCrossIncrement;
+            }
+
+        }
+
+        //MIN f(x,y)=-1,9133 (x, y)=(-0.54719, -0.54719)
+        public double f(bool[] boolX, bool[] boolY)
+        {
+            int x = BoolArrayToInt(boolX);
+            int y = BoolArrayToInt(boolY);
+            return Math.Sin(x + y) + (x - y) * (x - y) - 1.5 * x + 2.5 * y + 1;
+        }
+
+        static int BoolArrayToInt(bool[] arr)
+        {
+            if (arr.Length > 31)
+            {
+                throw new ApplicationException("Too many elements to be converted to a single int");
+            }
+
+            int val = 0;
+            for (int i = 0; i < arr.Length; ++i)
+                if (arr[i]) val |= 1 << i;
+            return val;
+        }
+
+        private void shufflePopulation()
+        {
+            for (int i = 0; i < population.Length; ++i)
+            {
+                int randomIndex = _random.Next(0, i + 1);
+
+                Individual temp = population[i];
+                population[i] = population[randomIndex];
+                population[randomIndex] = temp;
+            }
+        }
+        
     }
 }
