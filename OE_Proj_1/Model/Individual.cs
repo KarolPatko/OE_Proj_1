@@ -8,14 +8,19 @@ namespace OE_Proj_1.Model
 {
     class Individual : IComparable
     {
+        public int id;
         public bool[] chromosomeX;
         public bool[] chromosomeY;
         public double result;
+
+        private static int idIterator = 1;
 
         private static Random _random = new Random();
 
         public Individual(int size)
         {
+            id = idIterator;
+            ++idIterator;
             chromosomeX = randBoolArray(size);
             chromosomeY = randBoolArray(size);
         }

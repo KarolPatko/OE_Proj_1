@@ -76,6 +76,18 @@ namespace OE_Proj_1
                 config.selection = value.Replace("System.Windows.Controls.ComboBoxItem: ", "");
             }
         }
+
+        public string crossover
+        {
+            get
+            {
+                return config.crossover;
+            }
+            set
+            {
+                config.crossover = value.Replace("System.Windows.Controls.ComboBoxItem: ", "");
+            }
+        }
         public double crossPercentage
         {
             get
@@ -132,12 +144,28 @@ namespace OE_Proj_1
                     doRouletteSelection();
                     break;
                 case "TOURNAMENT":
+                    doTournamentSelection();
                     break;
             }
         }
 
         public void doCrossover()
         {
+            switch (crossover)
+            {
+                case "ONE_POINT":
+                    doOnePointCrossover();
+                    break;
+                case "TWO_POINT":
+                    doOnePointCrossover();
+                    break;
+                case "THREE_POINT":
+                    doThreePointCrossover();
+                    break;
+                case "HOMO":
+                    doHomoCrossover();
+                    break;
+            }
 
         }
 
@@ -149,9 +177,8 @@ namespace OE_Proj_1
         public void doBestSelection()
         {
             Array.Sort(population);
-            populationToCross = new Individual[Convert.ToInt32(population.Length * (crossPercentage / 100))];
-            for(int i = 0; i<population.Length * crossPercentage / 100; ++i)
-            {
+            populationToCross = new Individual[Convert.ToInt32(Math.Floor(population.Length * (crossPercentage * 1.0 / 100)))];
+            for(int i = 0; i < (Math.Floor(population.Length * (crossPercentage * 1.0 / 100))); ++i){
                 populationToCross[i] = population[i];
             }
         }
@@ -168,7 +195,7 @@ namespace OE_Proj_1
 
                 for(int j = i+1; j < population.Length && j < i+ Convert.ToInt32(crossPercentage); ++j)
                 {
-                    if(min.result < population[j].result)
+                    if(min.result > population[j].result)
                     {
                         min = population[j];
                     }
@@ -178,6 +205,46 @@ namespace OE_Proj_1
                 ++populationToCrossIncrement;
             }
 
+        }
+
+        public void doTournamentSelection()
+        {
+            //TODO
+            doRouletteSelection();
+        }
+
+
+        public void doOnePointCrossover()
+        {
+            shufflePopulationToCross();
+            int divider;
+            for(int i = 0; i < populationToCross.Length && i+1 <= populationToCross.Length; i += 2)
+            {
+                divider = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
+
+                bool temp;
+                for(int j = 0; j<divider; ++j)
+                {
+                    temp = populationToCross[i].chromosomeX[j];
+                    populationToCross[i].chromosomeX[j] = populationToCross[i + 1].chromosomeX[j];
+                    populationToCross[i + 1].chromosomeX[j] = temp;
+                }
+            }
+        }
+
+        public void doTwoPointCrossover()
+        {
+            //TODO Michal
+        }
+
+        public void doThreePointCrossover()
+        {
+            //TODO Michal
+        }
+
+        public void doHomoCrossover()
+        {
+            //TODO Michal
         }
 
         //MIN f(x,y)=-1,9133 (x, y)=(-0.54719, -0.54719)
@@ -212,6 +279,18 @@ namespace OE_Proj_1
                 population[randomIndex] = temp;
             }
         }
-        
+
+        private void shufflePopulationToCross()
+        {
+            for (int i = 0; i < populationToCross.Length; ++i)
+            {
+                int randomIndex = _random.Next(0, i + 1);
+
+                Individual temp = populationToCross[i];
+                populationToCross[i] = populationToCross[randomIndex];
+                populationToCross[randomIndex] = temp;
+            }
+        }
+
     }
 }

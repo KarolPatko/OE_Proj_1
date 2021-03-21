@@ -15,6 +15,7 @@ namespace OE_Proj_1.Model
         public double populationAmount { get; set; }
         public double epochs { get; set; }
         public string selection { get; set; }
+        public string crossover { get; set; }
         public double crossPercentage { get; set; }
 
         public static AlgorithmConfig Instance
