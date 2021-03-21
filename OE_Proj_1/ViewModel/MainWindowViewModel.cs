@@ -9,23 +9,26 @@ namespace OE_Proj_1.ViewModel
     {
         private AlgorithmConfig config = new AlgorithmConfig();
 
-        public double a
-        {
-            get {
-                return config.a;
-            }
-            set
-            {
-                config.a = value;
-                //komentarz
-                //onPropertyChanged(nameof(a));
-            }
-        }
+        /*        public double a
+                {
+                    get {
+                        return config.a;
+                    }
+                    set
+                    {
+                        config.a = value;
+                        //komentarz
+                        //onPropertyChanged(nameof(a));
+                    }
+                }*/
+        public double a { get; set; }
         public double b { get; set; }
         public double numberOfBits { get; set; }
         public double populationAmount { get; set; }
         public double epochs { get; set; }
         public string selection { get; set; }
+
+        private Individual[] population;
 
         /*        public event PropertyChangedEventHandler PropertyChanged;
 
@@ -38,11 +41,26 @@ namespace OE_Proj_1.ViewModel
                 }*/
 
         
-
-        public double f(double x, double y)
+        public void calculate()
         {
-            //MIN f(x,y)=-1,9133 (x, y)=(-0.54719, -0.54719)
-            return Math.Sin(x + y) + (x - y)*(x - y) - 1.5*x+2.5*y + 1;
+            initialize();
+            for(int i = 0; i < epochs; ++i)
+            {
+                doEvaluate();
+                doSelection();
+                doCrossover();
+                doMutatuion();
+            }
+        }
+
+        public void initialize()
+        {
+            population = new Individual[Convert.ToInt32(populationAmount)];
+        }
+
+        public void doEvaluate()
+        {
+
         }
 
         public void doSelection()
@@ -56,6 +74,22 @@ namespace OE_Proj_1.ViewModel
                 case "TOURNAMENT":
                     return;
             }
+        }
+
+        public void doCrossover()
+        {
+
+        }
+
+        public void doMutatuion()
+        {
+
+        }
+
+        public double f(double x, double y)
+        {
+            //MIN f(x,y)=-1,9133 (x, y)=(-0.54719, -0.54719)
+            return Math.Sin(x + y) + (x - y) * (x - y) - 1.5 * x + 2.5 * y + 1;
         }
     }
 }
