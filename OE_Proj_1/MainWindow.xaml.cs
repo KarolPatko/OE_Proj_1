@@ -1,5 +1,6 @@
 ﻿using OE_Proj_1.Model;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace OE_Proj_1
@@ -276,7 +277,7 @@ namespace OE_Proj_1
             for(int i = 0; i < populationToCross.Length && i+1 <= populationToCross.Length; i += 2)
             {
                 divider = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
-
+                Console.WriteLine("in");
                 bool temp;
                 for(int j = 0; j<divider; ++j)
                 {
@@ -289,12 +290,67 @@ namespace OE_Proj_1
 
         public void doTwoPointCrossover()
         {
-            //TODO Michal
+            shufflePopulationToCross();
+            int[] dividers = { 0, 0 };
+            for (int i = 0; i < populationToCross.Length && i + 1 <= populationToCross.Length; i += 2)
+            {
+                dividers[0] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
+                dividers[1] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
+                Array.Sort(dividers);
+
+                while(dividers[0] == dividers[1])
+                {
+                    dividers[1] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
+                }
+
+                Array.Sort(dividers);
+
+                bool temp;
+                
+                for (int j = dividers[0]; j < dividers[1]; ++j)
+                {
+                    temp = populationToCross[i].chromosomeX[j];
+                    populationToCross[i].chromosomeX[j] = populationToCross[i + 1].chromosomeX[j];
+                    populationToCross[i + 1].chromosomeX[j] = temp;
+                }
+            }
         }
 
         public void doThreePointCrossover()
         {
-            //TODO Michal
+            shufflePopulationToCross();
+            int[] dividers = { 0, 0, 0 };
+            for (int i = 0; i < populationToCross.Length && i + 1 <= populationToCross.Length; i += 2)
+            {
+                dividers[0] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
+                dividers[1] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
+                dividers[2] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
+
+                while(new HashSet<int>(dividers).Count == dividers.Length)
+                {
+                    dividers[0] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
+                    dividers[1] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
+                    dividers[2] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);   
+                }
+
+                Array.Sort(dividers);
+
+                bool temp;
+
+                for (int j = 0; j < dividers[0]; ++j)
+                {
+                    temp = populationToCross[i].chromosomeX[j];
+                    populationToCross[i].chromosomeX[j] = populationToCross[i + 1].chromosomeX[j];
+                    populationToCross[i + 1].chromosomeX[j] = temp;
+                }
+
+                for (int j = dividers[1]; j < dividers[2]; ++j)
+                {
+                    temp = populationToCross[i].chromosomeX[j];
+                    populationToCross[i].chromosomeX[j] = populationToCross[i + 1].chromosomeX[j];
+                    populationToCross[i + 1].chromosomeX[j] = temp;
+                }
+            }
         }
 
         public void doHomoCrossover()
