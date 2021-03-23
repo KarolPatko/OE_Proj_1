@@ -274,16 +274,21 @@ namespace OE_Proj_1
         {
             shufflePopulationToCross();
             int divider;
-            for(int i = 0; i < populationToCross.Length && i+1 <= populationToCross.Length; i += 2)
+            for(int i = 0; i < populationToCross.Length && i+1 <= populationToCross.Length; i++)
             {
                 divider = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
                 Console.WriteLine("in");
                 bool temp;
                 for(int j = 0; j<divider; ++j)
                 {
+                    /*
                     temp = populationToCross[i].chromosomeX[j];
                     populationToCross[i].chromosomeX[j] = populationToCross[i + 1].chromosomeX[j];
                     populationToCross[i + 1].chromosomeX[j] = temp;
+                    */
+                    temp = populationToCross[i].chromosomeX[j];
+                    populationToCross[i].chromosomeX[j] = populationToCross[i].chromosomeY[j];
+                    populationToCross[i].chromosomeY[j] = temp;
                 }
             }
         }
@@ -292,7 +297,7 @@ namespace OE_Proj_1
         {
             shufflePopulationToCross();
             int[] dividers = { 0, 0 };
-            for (int i = 0; i < populationToCross.Length && i + 1 <= populationToCross.Length; i += 2)
+            for (int i = 0; i < populationToCross.Length && i + 1 <= populationToCross.Length; i++)
             {
                 dividers[0] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
                 dividers[1] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
@@ -310,8 +315,8 @@ namespace OE_Proj_1
                 for (int j = dividers[0]; j < dividers[1]; ++j)
                 {
                     temp = populationToCross[i].chromosomeX[j];
-                    populationToCross[i].chromosomeX[j] = populationToCross[i + 1].chromosomeX[j];
-                    populationToCross[i + 1].chromosomeX[j] = temp;
+                    populationToCross[i].chromosomeX[j] = populationToCross[i].chromosomeY[j];
+                    populationToCross[i].chromosomeY[j] = temp;
                 }
             }
         }
@@ -320,7 +325,7 @@ namespace OE_Proj_1
         {
             shufflePopulationToCross();
             int[] dividers = { 0, 0, 0 };
-            for (int i = 0; i < populationToCross.Length && i + 1 <= populationToCross.Length; i += 2)
+            for (int i = 0; i < populationToCross.Length && i + 1 <= populationToCross.Length; i++)
             {
                 dividers[0] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
                 dividers[1] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
@@ -340,22 +345,38 @@ namespace OE_Proj_1
                 for (int j = 0; j < dividers[0]; ++j)
                 {
                     temp = populationToCross[i].chromosomeX[j];
-                    populationToCross[i].chromosomeX[j] = populationToCross[i + 1].chromosomeX[j];
-                    populationToCross[i + 1].chromosomeX[j] = temp;
+                    populationToCross[i].chromosomeX[j] = populationToCross[i].chromosomeY[j];
+                    populationToCross[i].chromosomeY[j] = temp;
                 }
 
                 for (int j = dividers[1]; j < dividers[2]; ++j)
                 {
                     temp = populationToCross[i].chromosomeX[j];
-                    populationToCross[i].chromosomeX[j] = populationToCross[i + 1].chromosomeX[j];
-                    populationToCross[i + 1].chromosomeX[j] = temp;
+                    populationToCross[i].chromosomeX[j] = populationToCross[i].chromosomeY[j];
+                    populationToCross[i].chromosomeY[j] = temp;
                 }
             }
         }
 
         public void doHomoCrossover()
         {
-            //TODO Michal
+            //pobrać s z formularza, jak na razie fixed s = 0,25
+            double s = 0.25;
+            bool temp;
+
+            for (int i = 0; i < populationToCross.Length; i++)
+            {
+                for(int j = 0; j < populationToCross[i].chromosomeX.Length && j < populationToCross[i].chromosomeY.Length; ++j)
+                {
+                    double epsilon = _random.Next(0, 1);
+                    if(epsilon <= s)
+                    {
+                        temp = populationToCross[i].chromosomeX[j];
+                        populationToCross[i].chromosomeX[j] = populationToCross[i].chromosomeY[j];
+                        populationToCross[i].chromosomeY[j] = temp;
+                    }
+                }    
+            }
         }
 
         //MIN f(x,y)=-1,9133 (x, y)=(-0.54719, -0.54719)
@@ -403,5 +424,19 @@ namespace OE_Proj_1
             }
         }
 
+        /*
+        private string ToBinaryString(double value)
+        {
+            const int bitCount = sizeof(double) * 8;
+            int intValue = System.BitConverter.ToInt32(BitConverter.GetBytes(value), 0);
+            return Convert.ToString(intValue, 2).PadLeft(bitCount, '0');
+        }
+
+        private float FromBinaryString(string bstra)
+        {
+            int intValue = Convert.ToInt32(bstra, 2);
+            return BitConverter.ToSingle(BitConverter.GetBytes(intValue), 0);
+        }
+        */
     }
 }
