@@ -220,12 +220,23 @@ namespace OE_Proj_1
                     doHomoCrossover();
                     break;
             }
-
         }
 
+        //Dodac prawdopodobienstwo, teraz mutuje zawsze
         public void doMutatuion()
         {
-
+            switch (mutation)
+            {
+                case "EDGE":
+                    doEdgeMutation();
+                    break;
+                case "ONE_POINT":
+                    doOnePointMutation();
+                    break;
+                case "TWO_POINT":
+                    doOnePointMutation();
+                    break;
+            }
         }
 
         public void doBestSelection()
@@ -510,6 +521,44 @@ namespace OE_Proj_1
                 }    
             }
             */
+        }
+
+        public void doEdgeMutation()
+        {
+            for(int i = 0; i<population.Length; ++i)
+            {
+                population[i].chromosomeX[Convert.ToInt32(numberOfBits) - 1] = !population[i].chromosomeX[Convert.ToInt32(numberOfBits) - 1];
+                population[i].chromosomeY[Convert.ToInt32(numberOfBits) - 1] = !population[i].chromosomeY[Convert.ToInt32(numberOfBits) - 1];
+            }
+        }
+
+        public void doOnePointMutation()
+        {
+            int randomNumber;
+            for (int i = 0; i < population.Length; ++i)
+            {
+                randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
+                population[i].chromosomeX[randomNumber] = !population[i].chromosomeX[randomNumber];
+                randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
+                population[i].chromosomeY[randomNumber] = !population[i].chromosomeY[randomNumber];
+            }
+        }
+
+        public void doTwoPointMutation()
+        {
+            int randomNumber;
+            for (int i = 0; i < population.Length; ++i)
+            {
+                randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
+                population[i].chromosomeX[randomNumber] = !population[i].chromosomeX[randomNumber];
+                randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
+                population[i].chromosomeX[randomNumber] = !population[i].chromosomeX[randomNumber];
+
+                randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
+                population[i].chromosomeY[randomNumber] = !population[i].chromosomeY[randomNumber];
+                randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
+                population[i].chromosomeY[randomNumber] = !population[i].chromosomeY[randomNumber];
+            }
         }
 
         //MIN f(x,y)=-1,9133 (x, y)=(-0.54719, -0.54719)
