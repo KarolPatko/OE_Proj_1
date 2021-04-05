@@ -5,9 +5,6 @@ using System.Windows;
 
 namespace OE_Proj_1
 {
-    /// <summary>
-    /// Logika interakcji dla klasy MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private AlgorithmConfig config = AlgorithmConfig.Instance;

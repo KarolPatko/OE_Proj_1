@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:OE_Proj_1"
         xmlns:mw="clr-namespace:OE_Proj_1.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="461.733" Width="331.2">
     <Window.DataContext>
         <mw:MainWindowViewModel />
     </Window.DataContext>
@@ -27,7 +27,7 @@
         <TextBlock HorizontalAlignment="Left" Margin="81,69,0,0" TextWrapping="Wrap" Text="Number of bits" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="59,126,0,0" TextWrapping="Wrap" Text="Number of epochs" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="59,319,0,0" TextWrapping="Wrap" Text="Selection method" VerticalAlignment="Top"/>
-        <Button Content="Calculate" HorizontalAlignment="Left" Margin="161,407,0,-6" VerticalAlignment="Top" Width="75" Click="calculate"/>
+        <Button Content="Calculate" HorizontalAlignment="Left" Margin="206,403,0,0" VerticalAlignment="Top" Width="75" Click="calculate"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="169,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding crossPercentage}"/>
         <TextBlock HorizontalAlignment="Left" Margin="59,213,0,0" TextWrapping="Wrap" Text="Cross percentage" VerticalAlignment="Top"/>
         <ComboBox HorizontalAlignment="Left" Margin="161,347,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding crossover}">
