@@ -169,6 +169,7 @@ namespace OE_Proj_1
                 doSelection();
                 doCrossover();
                 doMutatuion();
+                doInversion();
             }
         }
         public void initialize()
@@ -236,6 +237,24 @@ namespace OE_Proj_1
                 case "TWO_POINT":
                     doOnePointMutation();
                     break;
+            }
+        }
+
+        public void doInversion()
+        {
+            int pivot1;
+            int pivot2;
+            for(int i = 0; i<population.Length; ++i)
+            {
+
+                pivot1 = _random.Next(0, Convert.ToInt32(numberOfBits)-1);
+                pivot2 = _random.Next(pivot1, Convert.ToInt32(numberOfBits));
+
+                for(int j = pivot1; j <pivot2; ++j)
+                {
+                    population[i].chromosomeX[j] = !population[i].chromosomeX[j];
+                    population[i].chromosomeY[j] = !population[i].chromosomeY[j];
+                }
             }
         }
 
