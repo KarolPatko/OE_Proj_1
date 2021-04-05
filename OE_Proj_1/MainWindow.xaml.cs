@@ -175,9 +175,10 @@ namespace OE_Proj_1
         {
             population = new Individual[Convert.ToInt32(populationAmount)];
 
-            for(int i = 0; i < populationAmount; ++i)
+            int chromosomeLength = Convert.ToInt32(numberOfBits);
+            for (int i = 0; i < populationAmount; ++i)
             {
-                population[i] = new Individual(Convert.ToInt32(numberOfBits));
+                population[i] = new Individual(chromosomeLength);
             }
         }
 
@@ -193,11 +194,11 @@ namespace OE_Proj_1
                 case "BEST":
                     doBestSelection();
                     break;
-                case "ROULETTE":
-                    doRouletteSelection();
-                    break;
                 case "TOURNAMENT":
                     doTournamentSelection();
+                    break;
+                case "ROULETTE":
+                    doRouletteSelection();
                     break;
             }
         }
@@ -238,6 +239,12 @@ namespace OE_Proj_1
 
         public void doRouletteSelection()
         {
+            //TODO
+            doTournamentSelection();
+        }
+
+        public void doTournamentSelection()
+        {
             shufflePopulation();
             populationToCross = new Individual[Convert.ToInt32(Math.Ceiling(population.Length/crossPercentage))];
             int populationToCrossIncrement = 0;
@@ -260,38 +267,79 @@ namespace OE_Proj_1
 
         }
 
-        public void doTournamentSelection()
-        {
-            //TODO
-            doRouletteSelection();
-        }
-
 
         public void doOnePointCrossover()
         {
-            shufflePopulationToCross();
             int divider;
-            for(int i = 0; i < populationToCross.Length && i+1 <= populationToCross.Length; i++)
+            for (int i = 0; i< population.Length; ++i)
             {
-                divider = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
-                Console.WriteLine("in");
-                bool temp;
-                for(int j = 0; j<divider; ++j)
+                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
+                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
+
+                divider = _random.Next(0, Convert.ToInt32(numberOfBits));
+
+                for(int j = divider; j < firstIndividualToCross.chromosomeX.Length; ++j)
                 {
-                    /*
-                    temp = populationToCross[i].chromosomeX[j];
-                    populationToCross[i].chromosomeX[j] = populationToCross[i + 1].chromosomeX[j];
-                    populationToCross[i + 1].chromosomeX[j] = temp;
-                    */
-                    temp = populationToCross[i].chromosomeX[j];
-                    populationToCross[i].chromosomeX[j] = populationToCross[i].chromosomeY[j];
-                    populationToCross[i].chromosomeY[j] = temp;
+                    bool temp = firstIndividualToCross.chromosomeX[j];
+                    firstIndividualToCross.chromosomeX[j] = secondIndividualToCross.chromosomeX[j];
+                    secondIndividualToCross.chromosomeX[j] = temp;
+                }
+
+                divider = _random.Next(0, Convert.ToInt32(numberOfBits));
+
+                for (int j = divider; j < firstIndividualToCross.chromosomeY.Length; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeY[j];
+                    firstIndividualToCross.chromosomeY[j] = secondIndividualToCross.chromosomeY[j];
+                    secondIndividualToCross.chromosomeY[j] = temp;
+                }
+
+                population[i] = firstIndividualToCross;
+                ++i;
+                if(i < population.Length)
+                {
+                    population[i] = secondIndividualToCross;
                 }
             }
         }
 
         public void doTwoPointCrossover()
         {
+            int divider;
+            int divider2;
+            for (int i = 0; i < population.Length; ++i)
+            {
+                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
+                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
+
+                divider = _random.Next(0, Convert.ToInt32(numberOfBits)-1);
+                divider2 = _random.Next(divider, Convert.ToInt32(numberOfBits));
+
+                for (int j = divider; j < divider2; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeX[j];
+                    firstIndividualToCross.chromosomeX[j] = secondIndividualToCross.chromosomeX[j];
+                    secondIndividualToCross.chromosomeX[j] = temp;
+                }
+
+                divider = _random.Next(0, Convert.ToInt32(numberOfBits)-1);
+                divider2 = _random.Next(divider, Convert.ToInt32(numberOfBits));
+
+                for (int j = divider; j < divider2; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeY[j];
+                    firstIndividualToCross.chromosomeY[j] = secondIndividualToCross.chromosomeY[j];
+                    secondIndividualToCross.chromosomeY[j] = temp;
+                }
+
+                population[i] = firstIndividualToCross;
+                ++i;
+                if (i < population.Length)
+                {
+                    population[i] = secondIndividualToCross;
+                }
+            }
+            /*
             shufflePopulationToCross();
             int[] dividers = { 0, 0 };
             for (int i = 0; i < populationToCross.Length && i + 1 <= populationToCross.Length; i++)
@@ -316,10 +364,63 @@ namespace OE_Proj_1
                     populationToCross[i].chromosomeY[j] = temp;
                 }
             }
+            */
         }
 
         public void doThreePointCrossover()
         {
+            int divider;
+            int divider2;
+            int divider3;
+            for (int i = 0; i < population.Length; ++i)
+            {
+                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
+                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
+
+                divider = _random.Next(0, Convert.ToInt32(numberOfBits) - 2);
+                divider2 = _random.Next(divider, Convert.ToInt32(numberOfBits)-1);
+                divider3 = _random.Next(divider2, Convert.ToInt32(numberOfBits));
+
+                for (int j = divider; j < divider2; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeX[j];
+                    firstIndividualToCross.chromosomeX[j] = secondIndividualToCross.chromosomeX[j];
+                    secondIndividualToCross.chromosomeX[j] = temp;
+                }
+
+                for (int j = divider3; j < firstIndividualToCross.chromosomeX.Length; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeX[j];
+                    firstIndividualToCross.chromosomeX[j] = secondIndividualToCross.chromosomeX[j];
+                    secondIndividualToCross.chromosomeX[j] = temp;
+                }
+
+                divider = _random.Next(0, Convert.ToInt32(numberOfBits) - 2);
+                divider2 = _random.Next(divider, Convert.ToInt32(numberOfBits) - 1);
+                divider3 = _random.Next(divider2, Convert.ToInt32(numberOfBits));
+
+                for (int j = divider; j < divider2; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeY[j];
+                    firstIndividualToCross.chromosomeY[j] = secondIndividualToCross.chromosomeY[j];
+                    secondIndividualToCross.chromosomeY[j] = temp;
+                }
+
+                for (int j = divider3; j < firstIndividualToCross.chromosomeY.Length; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeY[j];
+                    firstIndividualToCross.chromosomeY[j] = secondIndividualToCross.chromosomeY[j];
+                    secondIndividualToCross.chromosomeY[j] = temp;
+                }
+
+                population[i] = firstIndividualToCross;
+                ++i;
+                if (i < population.Length)
+                {
+                    population[i] = secondIndividualToCross;
+                }
+            }
+            /*
             shufflePopulationToCross();
             int[] dividers = { 0, 0, 0 };
             for (int i = 0; i < populationToCross.Length && i + 1 <= populationToCross.Length; i++)
@@ -353,10 +454,44 @@ namespace OE_Proj_1
                     populationToCross[i].chromosomeY[j] = temp;
                 }
             }
+            */
         }
 
         public void doHomoCrossover()
         {
+            for (int i = 0; i < population.Length; ++i)
+            {
+                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
+                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
+
+                for (int j = 0; j < firstIndividualToCross.chromosomeX.Length; ++j)
+                {
+                    if (j % 2 == 0)
+                    {
+                        bool temp = firstIndividualToCross.chromosomeX[j];
+                        firstIndividualToCross.chromosomeX[j] = secondIndividualToCross.chromosomeX[j];
+                        secondIndividualToCross.chromosomeX[j] = temp;
+                    }
+                }
+
+                for (int j = 0; j < firstIndividualToCross.chromosomeY.Length; ++j)
+                {
+                    if (j % 2 == 0)
+                    {
+                        bool temp = firstIndividualToCross.chromosomeY[j];
+                        firstIndividualToCross.chromosomeY[j] = secondIndividualToCross.chromosomeY[j];
+                        secondIndividualToCross.chromosomeY[j] = temp;
+                    }
+                }
+
+                population[i] = firstIndividualToCross;
+                ++i;
+                if (i < population.Length)
+                {
+                    population[i] = secondIndividualToCross;
+                }
+            }
+            /*
             //pobrać s z formularza, jak na razie fixed s = 0,25
             double s = 0.25;
             bool temp;
@@ -374,6 +509,7 @@ namespace OE_Proj_1
                     }
                 }    
             }
+            */
         }
 
         //MIN f(x,y)=-1,9133 (x, y)=(-0.54719, -0.54719)
