@@ -1,6 +1,8 @@
 ﻿using OE_Proj_1.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace OE_Proj_1
@@ -159,10 +161,19 @@ namespace OE_Proj_1
         {
             InitializeComponent();
         }
-        
+
+        private double[] bb;
+        private double[] bbx;
+        private double[] bby;
+        private static int iterator = 0;
+
         public void calculate(object sender, RoutedEventArgs e)
         {
             initialize();
+            bb = new double[Convert.ToInt32(epochs)*2];
+            bbx = new double[Convert.ToInt32(epochs) * 2];
+            bby = new double[Convert.ToInt32(epochs) * 2];
+            iterator = 0;
             for (int i = 0; i < epochs; ++i)
             {
                 doEvaluate();
@@ -170,7 +181,39 @@ namespace OE_Proj_1
                 doCrossover();
                 doMutatuion();
                 doInversion();
+                getBest();
             }
+            ExampleAsync();
+
+
+        }
+
+        public void getBest()
+        {
+            double min = population[0].result;
+
+            for(int i = 0; i<population.Length; ++i)
+            {
+                if(population[i].result < min)
+                {
+                    min = population[i].result;
+                }
+            }
+            bb[iterator] = min;
+            ++iterator;
+        }
+
+        public void ExampleAsync()
+        {
+            string abc = "";
+            for(int i =0; i<epochs; ++i)
+            {
+                abc += bb[i] + " " + bbx[i] + " " + bby[i] + "\n";
+            }
+            string[] hg = new string[1];
+            hg[0] = abc;
+
+            File.WriteAllLines("WriteLines.txt", hg);
         }
         public void initialize()
         {
@@ -185,7 +228,10 @@ namespace OE_Proj_1
 
         public void doEvaluate()
         {
-            Array.ForEach(population, individual => individual.result = f(individual.chromosomeX, individual.chromosomeY));
+            for(int i=0; i<population.Length; ++i)
+            {
+                population[i].result = f(population[i].chromosomeX, population[i].chromosomeY);
+            }
         }
 
         public void doSelection()
@@ -246,14 +292,17 @@ namespace OE_Proj_1
             int pivot2;
             for(int i = 0; i<population.Length; ++i)
             {
-
-                pivot1 = _random.Next(0, Convert.ToInt32(numberOfBits)-1);
-                pivot2 = _random.Next(pivot1, Convert.ToInt32(numberOfBits));
-
-                for(int j = pivot1; j <pivot2; ++j)
+                double random = _random.NextDouble();
+                if (random < inversionPercentage)
                 {
-                    population[i].chromosomeX[j] = !population[i].chromosomeX[j];
-                    population[i].chromosomeY[j] = !population[i].chromosomeY[j];
+                    pivot1 = _random.Next(0, Convert.ToInt32(numberOfBits) - 1);
+                    pivot2 = _random.Next(pivot1, Convert.ToInt32(numberOfBits));
+
+                    for (int j = pivot1; j < pivot2; ++j)
+                    {
+                        population[i].chromosomeX[j] = !population[i].chromosomeX[j];
+                        population[i].chromosomeY[j] = !population[i].chromosomeY[j];
+                    }
                 }
             }
         }
@@ -261,8 +310,8 @@ namespace OE_Proj_1
         public void doBestSelection()
         {
             Array.Sort(population);
-            populationToCross = new Individual[Convert.ToInt32(Math.Floor(population.Length * (crossPercentage * 1.0 / 100)))];
-            for(int i = 0; i < (Math.Floor(population.Length * (crossPercentage * 1.0 / 100))); ++i){
+            populationToCross = new Individual[Convert.ToInt32(Math.Floor(population.Length * (bestPercentageOrTournamentAmount * 1.0 / 100)))];
+            for(int i = 0; i < (Math.Floor(population.Length * (bestPercentageOrTournamentAmount * 1.0 / 100))); ++i){
                 populationToCross[i] = population[i];
             }
         }
@@ -301,10 +350,10 @@ namespace OE_Proj_1
         public void doOnePointCrossover()
         {
             int divider;
-            for (int i = 0; i< population.Length; ++i)
+            for (int i = 0; i< population.Length;)
             {
-                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
-                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
+                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length) -1)];
+                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length)-1)];
 
                 divider = _random.Next(0, Convert.ToInt32(numberOfBits));
 
@@ -324,11 +373,16 @@ namespace OE_Proj_1
                     secondIndividualToCross.chromosomeY[j] = temp;
                 }
 
-                population[i] = firstIndividualToCross;
-                ++i;
-                if(i < population.Length)
+                double random = _random.NextDouble();
+                if (random < crossPercentage)
                 {
-                    population[i] = secondIndividualToCross;
+                    population[i] = firstIndividualToCross;
+                    ++i;
+                    if (i < population.Length)
+                    {
+                        population[i] = secondIndividualToCross;
+                    }
+                    ++i;
                 }
             }
         }
@@ -546,8 +600,12 @@ namespace OE_Proj_1
         {
             for(int i = 0; i<population.Length; ++i)
             {
-                population[i].chromosomeX[Convert.ToInt32(numberOfBits) - 1] = !population[i].chromosomeX[Convert.ToInt32(numberOfBits) - 1];
-                population[i].chromosomeY[Convert.ToInt32(numberOfBits) - 1] = !population[i].chromosomeY[Convert.ToInt32(numberOfBits) - 1];
+                double random = _random.NextDouble();
+                if (random < mutationPercentage)
+                {
+                    population[i].chromosomeX[Convert.ToInt32(numberOfBits) - 1] = !population[i].chromosomeX[Convert.ToInt32(numberOfBits) - 1];
+                    population[i].chromosomeY[Convert.ToInt32(numberOfBits) - 1] = !population[i].chromosomeY[Convert.ToInt32(numberOfBits) - 1];
+                }
             }
         }
 
@@ -556,10 +614,15 @@ namespace OE_Proj_1
             int randomNumber;
             for (int i = 0; i < population.Length; ++i)
             {
-                randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
-                population[i].chromosomeX[randomNumber] = !population[i].chromosomeX[randomNumber];
-                randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
-                population[i].chromosomeY[randomNumber] = !population[i].chromosomeY[randomNumber];
+                double random = _random.NextDouble();
+
+                if (random < mutationPercentage)
+                {
+                    randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
+                    population[i].chromosomeX[randomNumber] = !population[i].chromosomeX[randomNumber];
+                    randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
+                    population[i].chromosomeY[randomNumber] = !population[i].chromosomeY[randomNumber];
+                }
             }
         }
 
@@ -585,7 +648,14 @@ namespace OE_Proj_1
         {
             int x = BoolArrayToInt(boolX);
             int y = BoolArrayToInt(boolY);
-            return Math.Sin(x + y) + (x - y) * (x - y) - 1.5 * x + 2.5 * y + 1;
+
+            //tego m sie nie da policzyć ale jak to tutaj podstawię to działa zamiast tych logarytmów ¯\_(ツ)_/¯
+            double m = numberOfBits;//Math.Ceiling(Math.Log((a + b) * numberOfBits, 2) + Math.Log(1, 2));
+
+            double newX = a + x * (b - a) / (Math.Pow(2, m) - 1);
+            double newY = a + y * (b - a) / (Math.Pow(2, m) - 1);
+
+            return Math.Sin(newX + newY) + (newX - newY) * (newX - newY) - 1.5 * newX + 2.5 * newY + 1;
         }
 
         static int BoolArrayToInt(bool[] arr)
