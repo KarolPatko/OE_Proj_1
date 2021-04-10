@@ -3,6 +3,7 @@ using OE_Proj_1.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,8 +14,16 @@ namespace OE_Proj_1
 
     public partial class MainWindow : Window
     {
+
         private AlgorithmConfig config = AlgorithmConfig.Instance;
 
+        private MainWindowViewModel ViewModel;
+        public MainWindow()
+        {
+            InitializeComponent();
+            ViewModel = new MainWindowViewModel();
+            this.DataContext = ViewModel;
+        }
         
         public double a
         {
@@ -170,11 +179,6 @@ namespace OE_Proj_1
             set { config.bestValueToEpoch = value; }
         }
 
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-
         private double[] bb;
         private double[] sr;
         private double[] s;
@@ -184,7 +188,11 @@ namespace OE_Proj_1
 
         public void calculate(object sender, RoutedEventArgs e)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             setError();
+            ViewModel.refreshError(config.error);
             if (config.error != "") return;
 
             initialize();
@@ -206,6 +214,11 @@ namespace OE_Proj_1
             }
             fillCharts();
             ExampleAsync();
+            stopwatch.Start();
+            TimeSpan ts = stopwatch.Elapsed;
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+            ViewModel.refresh(elapsedTime);
         }
 
         public void setError()
@@ -220,22 +233,22 @@ namespace OE_Proj_1
 
             if(numberOfBits <= 0)
             {
-                config.error += "Liczba bitów musi być większa od 0/n";
+                config.error += "Liczba bitów musi być większa od 0\n";
             }
 
             if (numberOfBits >= 31)
             {
-                config.error += "Liczba bitów musi być mniejsza lub równa 31/n";
+                config.error += "Liczba bitów musi być mniejsza lub równa 31\n";
             }
 
             if (populationAmount < 2)
             {
-                config.error += "Populacja musi być większa niż 2/n";
+                config.error += "Populacja musi być większa niż 2\n";
             }
 
             if (epochs <= 0)
             {
-                config.error += "Liczba epok musi być większa od zera/n";
+                config.error += "Liczba epok musi być większa od zera\n";
             }
         }
 

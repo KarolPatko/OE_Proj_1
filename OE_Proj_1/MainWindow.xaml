@@ -99,5 +99,6 @@
 
         </chart:SfChart>
         <TextBlock HorizontalAlignment="Left" Margin="58,476,0,0" TextWrapping="Wrap" Text="{Binding error}" VerticalAlignment="Top" Height="183" Width="223"/>
+        <TextBlock HorizontalAlignment="Left" Margin="58,455,0,0" TextWrapping="Wrap" Text="{Binding time}" VerticalAlignment="Top" Width="223"/>
     </Grid>
 </Window>

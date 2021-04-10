@@ -26,6 +26,8 @@ namespace OE_Proj_1.ViewModel
     {
         private AlgorithmConfig config = AlgorithmConfig.Instance;
 
+
+
         public double a
         {
             get
@@ -153,6 +155,10 @@ namespace OE_Proj_1.ViewModel
             {
                 return config.error;
             }
+            set
+            {
+                config.error = value;
+            }
         }
         public double crossPercentage
         {
@@ -179,6 +185,7 @@ namespace OE_Proj_1.ViewModel
                 onPropertyChanged(nameof(sValueToEpoch));
             }
         }
+        public string time { get; set; }
 
         public ObservableCollection<Modell> Dataa
         {
@@ -194,7 +201,6 @@ namespace OE_Proj_1.ViewModel
         }; 
             }
         }
-
 
        public event PropertyChangedEventHandler PropertyChanged;
 
@@ -238,6 +244,21 @@ namespace OE_Proj_1.ViewModel
                 config.sValueToEpoch = value;
                 onPropertyChanged(nameof(sValueToEpoch));
             }
+        }
+
+        public void refresh(string ts)
+        {
+            onPropertyChanged(nameof(sValueToEpoch));
+            onPropertyChanged(nameof(bestValueToEpoch));
+            onPropertyChanged(nameof(avgValueToEpoch));
+            time = "Time: " + ts;
+            onPropertyChanged(nameof(time));
+        }
+
+        public void refreshError(string newError)
+        {
+            error = newError;
+            onPropertyChanged(nameof(error));
         }
     }
 }
