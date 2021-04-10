@@ -5,6 +5,10 @@ namespace OE_Proj_1.ViewModel
 
     using Model;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.IO;
+    using System.Windows;
+    using static OE_Proj_1.Model.AlgorithmConfig;
 
     public class Modell
     {
@@ -18,7 +22,7 @@ namespace OE_Proj_1.ViewModel
             Target = yValue;
         }
     }
-    public class MainWindowViewModel// : INotifyPropertyChanged
+    public class MainWindowViewModel : INotifyPropertyChanged
     {
         private AlgorithmConfig config = AlgorithmConfig.Instance;
 
@@ -163,18 +167,11 @@ namespace OE_Proj_1.ViewModel
             set
             {
                 config.mutationPercentage = value;
+                onPropertyChanged(nameof(bestValueToEpoch));
+                onPropertyChanged(nameof(avgValueToEpoch));
+                onPropertyChanged(nameof(sValueToEpoch));
             }
         }
-
-        /*        public event PropertyChangedEventHandler PropertyChanged;
-
-                private void onPropertyChanged(string propertyName)
-                {
-                    if(PropertyChanged != null)
-                    {
-                        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                    }
-                }*/
 
         public ObservableCollection<Modell> Dataa
         {
@@ -187,7 +184,52 @@ namespace OE_Proj_1.ViewModel
             new Modell("Mar", 65),
             new Modell("Apr", 57),
             new Modell("May", 48),
-        }; ;
+        }; 
+            }
+        }
+
+
+       public event PropertyChangedEventHandler PropertyChanged;
+
+        public void onPropertyChanged(string propertyName){
+            if(PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        public ObservableCollection<BestValueToEpoch> bestValueToEpoch
+        {
+            get {
+                return config.bestValueToEpoch;
+            }
+            set {
+                config.bestValueToEpoch = value;
+                onPropertyChanged(nameof(bestValueToEpoch));
+            }
+        }
+        public ObservableCollection<BestValueToEpoch> avgValueToEpoch
+        {
+            get
+            {
+                return config.avgValueToEpoch;
+            }
+            set
+            {
+                config.avgValueToEpoch = value;
+                onPropertyChanged(nameof(avgValueToEpoch));
+            }
+        }
+        public ObservableCollection<BestValueToEpoch> sValueToEpoch
+        {
+            get
+            {
+                return config.sValueToEpoch;
+            }
+            set
+            {
+                config.sValueToEpoch = value;
+                onPropertyChanged(nameof(sValueToEpoch));
             }
         }
     }

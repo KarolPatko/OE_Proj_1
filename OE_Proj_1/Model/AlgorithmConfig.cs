@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,9 @@ namespace OE_Proj_1.Model
         public string mutation { get; set; }
         public double crossPercentage { get; set; }
         public double mutationPercentage { get; set; }
+        public ObservableCollection<BestValueToEpoch> bestValueToEpoch { get; set; }
+        public ObservableCollection<BestValueToEpoch> avgValueToEpoch { get; set; }
+        public ObservableCollection<BestValueToEpoch> sValueToEpoch { get; set; }
 
         public static AlgorithmConfig Instance
         {
@@ -32,6 +36,19 @@ namespace OE_Proj_1.Model
                     instance = new AlgorithmConfig();
                 }
                 return instance;
+            }
+        }
+
+        public class BestValueToEpoch
+        {
+            public double Best { get; set; }
+
+            public double Epoch { get; set; }
+
+            public BestValueToEpoch(double xValue, double yValue)
+            {
+                Epoch = xValue;
+                Best = yValue;
             }
         }
     }

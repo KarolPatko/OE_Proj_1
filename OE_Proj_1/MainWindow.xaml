@@ -8,11 +8,14 @@
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" x:Class="OE_Proj_1.MainWindow"
         mc:Ignorable="d"
         xmlns:chart="clr-namespace:Syncfusion.UI.Xaml.Charts;assembly=Syncfusion.SfChart.WPF"
-        Title="MainWindow" Height="461.733" Width="1114.8">
+        Title="MainWindow" Height="1084.733" Width="954.8">
     <Window.DataContext>
         <mw:MainWindowViewModel />
     </Window.DataContext>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -56,15 +59,7 @@
         <TextBlock HorizontalAlignment="Left" Margin="49,283,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Inversion"/><Run Text=" percentage"/></TextBlock>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="170,185,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding eliteAmount}"/>
         <TextBlock HorizontalAlignment="Left" Margin="92,187,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="73"><Run Text="Elite "/><Run Text="amount"/></TextBlock>
-        <syncfusion:SfChart Header="Chart Header" HorizontalAlignment="Right" Margin="0,10,185.8,0" VerticalAlignment="Top" Height="242" Width="628" RenderTransformOrigin="0.314,0.726" Grid.RowSpan="1">
-            <syncfusion:SfChart.PrimaryAxis>
-                <syncfusion:NumericalAxis FontSize="10" Header="Primary Axis" Maximum="{Binding epochs}" Minimum="0" ShowGridLines="False"/>
-            </syncfusion:SfChart.PrimaryAxis>
-            <syncfusion:SfChart.SecondaryAxis>
-                <syncfusion:NumericalAxis FontSize="10" Header="Secondary Axis" Maximum="100" Minimum="0"/>
-            </syncfusion:SfChart.SecondaryAxis>
-        </syncfusion:SfChart>
-        <chart:SfChart Margin="0,0,89.8,0" Height="175" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="709">
+        <chart:SfChart Margin="0,12,9.8,0" HorizontalAlignment="Right" Width="644" Height="250" VerticalAlignment="Top">
 
             <chart:SfChart.PrimaryAxis>
                 <chart:CategoryAxis/>
@@ -74,8 +69,35 @@
                 <chart:NumericalAxis/>
             </chart:SfChart.SecondaryAxis>
 
-            <chart:LineSeries ItemsSource="{Binding Dataa}" XBindingPath="Month" YBindingPath="Target"/>
+            <chart:LineSeries ItemsSource="{Binding Path=bestValueToEpoch, Mode=TwoWay}" XBindingPath="Epoch" YBindingPath="Best" Margin="0,0,-79.2,-0.6"/>
 
         </chart:SfChart>
+        <chart:SfChart Margin="0,12,9.8,0" HorizontalAlignment="Right" Width="644" Height="250" >
+
+            <chart:SfChart.PrimaryAxis>
+                <chart:CategoryAxis/>
+            </chart:SfChart.PrimaryAxis>
+
+            <chart:SfChart.SecondaryAxis>
+                <chart:NumericalAxis/>
+            </chart:SfChart.SecondaryAxis>
+
+            <chart:LineSeries ItemsSource="{Binding Path=avgValueToEpoch, Mode=TwoWay}" XBindingPath="Epoch" YBindingPath="Best" Margin="0,0,-79.6,-0.2"/>
+
+        </chart:SfChart>
+        <chart:SfChart Margin="0,12,9.8,0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="644" Height="250" >
+
+            <chart:SfChart.PrimaryAxis>
+                <chart:CategoryAxis/>
+            </chart:SfChart.PrimaryAxis>
+
+            <chart:SfChart.SecondaryAxis>
+                <chart:NumericalAxis/>
+            </chart:SfChart.SecondaryAxis>
+
+            <chart:LineSeries ItemsSource="{Binding sValueToEpoch}" XBindingPath="Epoch" YBindingPath="Best" Margin="0,0,-79.6,-0.2"/>
+
+        </chart:SfChart>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="180,460,0,0" VerticalAlignment="Top" Width="75"/>
     </Grid>
 </Window>

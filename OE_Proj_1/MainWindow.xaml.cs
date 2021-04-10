@@ -1,10 +1,12 @@
 ﻿using OE_Proj_1.Model;
+using OE_Proj_1.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using static OE_Proj_1.Model.AlgorithmConfig;
 
 namespace OE_Proj_1
 {
@@ -12,6 +14,8 @@ namespace OE_Proj_1
     public partial class MainWindow : Window
     {
         private AlgorithmConfig config = AlgorithmConfig.Instance;
+
+        
         public double a
         {
             get
@@ -160,14 +164,20 @@ namespace OE_Proj_1
         private Individual[] populationToCross;
         private Individual[] bestIndividuals = new Individual[2];
         private static Random _random = new Random();
+        public ObservableCollection<BestValueToEpoch> bestValueToEpoch
+        {
+            get { return config.bestValueToEpoch; }
+            set { config.bestValueToEpoch = value; }
+        }
 
-
-    public MainWindow()
+        public MainWindow()
         {
             InitializeComponent();
         }
 
         private double[] bb;
+        private double[] sr;
+        private double[] s;
         private double[] bbx;
         private double[] bby;
         private static int iterator = 0;
@@ -175,9 +185,11 @@ namespace OE_Proj_1
         public void calculate(object sender, RoutedEventArgs e)
         {
             initialize();
-            bb = new double[Convert.ToInt32(epochs)*2];
-            bbx = new double[Convert.ToInt32(epochs) * 2];
-            bby = new double[Convert.ToInt32(epochs) * 2];
+            bb = new double[Convert.ToInt32(epochs)];
+            sr = new double[Convert.ToInt32(epochs)];
+            s = new double[Convert.ToInt32(epochs)];
+            bbx = new double[Convert.ToInt32(epochs)];
+            bby = new double[Convert.ToInt32(epochs)];
             iterator = 0;
             for (int i = 0; i < epochs; ++i)
             {
@@ -189,7 +201,9 @@ namespace OE_Proj_1
                 doInversion();
                 rewriteBest();
             }
+            fillCharts();
             ExampleAsync();
+
 
 
         }
@@ -220,8 +234,15 @@ namespace OE_Proj_1
             {
                 abc += bb[i] + " " + bbx[i] + " " + bby[i] + "\n";
             }
-            string[] hg = new string[1];
+            string[] hg = new string[2];
             hg[0] = abc;
+
+            string a = "";
+            for(int i=0; i<config.bestValueToEpoch.Count; ++i)
+            {
+                a += " " + config.bestValueToEpoch[i].Best + "|"+ config.bestValueToEpoch[i].Epoch;
+            }
+            hg[1] = a;
 
             File.WriteAllLines("WriteLines.txt", hg);
         }
@@ -238,10 +259,19 @@ namespace OE_Proj_1
 
         public void doEvaluate()
         {
+            double sum = 0;
             for(int i=0; i<population.Length; ++i)
             {
                 population[i].result = f(population[i].chromosomeX, population[i].chromosomeY);
+                sum += population[i].result;
             }
+            sr[iterator] = sum / population.Length;
+            sum = 0;
+            for (int i = 0; i < population.Length; ++i)
+            {
+                sum += Math.Pow(population[i].result * sr[iterator], 2);
+            }
+            s[iterator] = Math.Sqrt(sum / population.Length);
         }
 
         public void doSelection()
@@ -628,6 +658,22 @@ namespace OE_Proj_1
         {
             population[0] = bestIndividuals[0].Clone();
             population[1] = bestIndividuals[1].Clone();
+        }
+
+        public void fillCharts()
+        {
+            ObservableCollection<BestValueToEpoch> bestValueToEpochToSet = new ObservableCollection<BestValueToEpoch>();
+            ObservableCollection<BestValueToEpoch> avgValueToEpochToSet = new ObservableCollection<BestValueToEpoch>();
+            ObservableCollection<BestValueToEpoch> sValueToEpochToSet = new ObservableCollection<BestValueToEpoch>();
+
+            for (int i = 0; i < bb.Length; ++i) {
+                bestValueToEpochToSet.Add(new BestValueToEpoch(i, bb[i]));
+                avgValueToEpochToSet.Add(new BestValueToEpoch(i, sr[i]));
+                sValueToEpochToSet.Add(new BestValueToEpoch(i, s[i]));
+            }
+            config.bestValueToEpoch = bestValueToEpochToSet;
+            config.avgValueToEpoch = avgValueToEpochToSet;
+            config.sValueToEpoch = sValueToEpochToSet;
         }
     }
 }
