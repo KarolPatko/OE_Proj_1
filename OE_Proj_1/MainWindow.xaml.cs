@@ -184,18 +184,15 @@ namespace OE_Proj_1
 
         public void calculate(object sender, RoutedEventArgs e)
         {
-            iterator = 0;
             setError();
-            if(config.error != "")
-            {
-                return;
-            }
+            if (config.error != "") return;
+
             initialize();
-            bb = new double[Convert.ToInt32(epochs)];
-            sr = new double[Convert.ToInt32(epochs)];
-            s = new double[Convert.ToInt32(epochs)];
+
+            //TODO delete
             bbx = new double[Convert.ToInt32(epochs)];
             bby = new double[Convert.ToInt32(epochs)];
+
             for (int i = 0; i < epochs; ++i)
             {
                 doEvaluate();
@@ -209,9 +206,6 @@ namespace OE_Proj_1
             }
             fillCharts();
             ExampleAsync();
-
-
-
         }
 
         public void setError()
@@ -247,6 +241,7 @@ namespace OE_Proj_1
 
         public void initialize()
         {
+            //initialize population
             population = new Individual[Convert.ToInt32(populationAmount)];
 
             int chromosomeLength = Convert.ToInt32(numberOfBits);
@@ -255,13 +250,22 @@ namespace OE_Proj_1
                 population[i] = new Individual(chromosomeLength);
             }
 
+            //initialize file with iterations
             string[] empty = new string[1];
             empty[0] = "";
             File.WriteAllLines("iterations.txt", empty);
+
+            //initialize arrays to save values
+            bb = new double[Convert.ToInt32(epochs)];
+            sr = new double[Convert.ToInt32(epochs)];
+            s = new double[Convert.ToInt32(epochs)];
+
+            iterator = 0;
         }
 
         public void doEvaluate()
         {
+            //calculate sum and evaluate idividual value
             double sum = 0;
             for (int i = 0; i < population.Length; ++i)
             {
@@ -269,6 +273,8 @@ namespace OE_Proj_1
                 sum += population[i].result;
             }
             sr[iterator] = sum / population.Length;
+
+            //calculate standard deviation
             sum = 0;
             for (int i = 0; i < population.Length; ++i)
             {
@@ -279,6 +285,9 @@ namespace OE_Proj_1
 
         public void saveIteration(int i)
         {
+            //file format
+            //epoch
+            //chromosomeX chromosomeY value | for each individual in population
             string[] iterationInfo = {"" + i};
             File.AppendAllLines("iterations.txt", iterationInfo);
 
@@ -317,6 +326,7 @@ namespace OE_Proj_1
             ++iterator;
         }
 
+        //TODO delete
         public void ExampleAsync()
         {
             string abc = "";
@@ -336,8 +346,6 @@ namespace OE_Proj_1
 
             File.WriteAllLines("WriteLines.txt", hg);
         }
-
-
 
         public void doSelection()
         {
@@ -414,16 +422,81 @@ namespace OE_Proj_1
         public void doBestSelection()
         {
             Array.Sort(population);
-            populationToCross = new Individual[Convert.ToInt32(Math.Floor(population.Length * (bestPercentageOrTournamentAmount * 1.0 / 100)))];
-            for(int i = 0; i < (Math.Floor(population.Length * (bestPercentageOrTournamentAmount * 1.0 / 100))); ++i){
+            int populationToCrossLength = Convert.ToInt32(Math.Floor(population.Length * (bestPercentageOrTournamentAmount * 1.0 / 100)));
+            populationToCross = new Individual[populationToCrossLength];
+            for(int i = 0; i < populationToCrossLength ; ++i){
                 populationToCross[i] = population[i].Clone();
             }
         }
 
         public void doRouletteSelection()
         {
-            //TODO
-            doTournamentSelection();
+            double min = population[0].result;
+            double max = population[0].result;
+            for (int i = 0; i< population.Length; ++i)
+            {
+                if(population[i].result < min)
+                {
+                    min = population[i].result;
+                }
+                if (population[i].result > max)
+                {
+                    max = population[i].result;
+                }
+            }
+
+            if(min == 0)
+            {
+                for (int i = 0; i < population.Length; ++i)
+                {
+                    population[i].result += 0.0001;
+                }
+            }
+            if(min < 0)
+            {
+                for (int i = 0; i < population.Length; ++i)
+                {
+                    population[i].result += min + ((-1 * min)/(max - min)) + 0.0001;
+                }
+            }
+
+            double sum = 0;
+            for (int i = 0; i < population.Length; ++i)
+            {
+                population[i].result /= 1;
+                sum += population[i].result;
+            }
+
+            population[0].distributor = sum/population[0].result;
+            for(int i = 1; i< population.Length; ++i)
+            {
+                population[i].distributor = population[i-1].distributor + sum / population[i].result;
+            }
+            population[population.Length - 1].distributor = 1;
+
+            int populationToCrossLength = Convert.ToInt32(Math.Floor(population.Length * (bestPercentageOrTournamentAmount * 1.0 / 100)));
+            populationToCross = new Individual[populationToCrossLength];
+
+            double random = _random.NextDouble();
+            bool breaked;
+            for (int i = 0; i < populationToCrossLength; ++i)
+            {
+                breaked = false;
+                for (int j = population.Length - 1; j > 0; --j)
+                {
+                    if(random > population[j].distributor)
+                    {
+                        populationToCross[i] = population[j + 1].Clone();
+                        breaked = true;
+                        break;
+                    }
+                }
+                if (!breaked)
+                {
+                    populationToCross[i] = population[0].Clone();
+                }
+            }
+
         }
 
         public void doTournamentSelection()
@@ -449,7 +522,6 @@ namespace OE_Proj_1
             }
 
         }
-
 
         public void doOnePointCrossover()
         {
@@ -496,10 +568,10 @@ namespace OE_Proj_1
         {
             int divider;
             int divider2;
-            for (int i = 2; i < population.Length; ++i)
+            for (int i = 2; i < population.Length;)
             {
-                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
-                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
+                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))].Clone();
+                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))].Clone();
 
                 divider = _random.Next(0, Convert.ToInt32(numberOfBits)-1);
                 divider2 = _random.Next(divider, Convert.ToInt32(numberOfBits));
@@ -521,11 +593,16 @@ namespace OE_Proj_1
                     secondIndividualToCross.chromosomeY[j] = temp;
                 }
 
-                population[i] = firstIndividualToCross;
-                ++i;
-                if (i < population.Length)
+                double random = _random.NextDouble();
+                if (random < crossPercentage && i >= 2)
                 {
-                    population[i] = secondIndividualToCross;
+                    population[i] = firstIndividualToCross.Clone();
+                    ++i;
+                    if (i < population.Length)
+                    {
+                        population[i] = secondIndividualToCross.Clone();
+                    }
+                    ++i;
                 }
             }
         }
@@ -535,10 +612,10 @@ namespace OE_Proj_1
             int divider;
             int divider2;
             int divider3;
-            for (int i = 4; i < population.Length; ++i)
+            for (int i = 2; i < population.Length;)
             {
-                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
-                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
+                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))].Clone();
+                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))].Clone();
 
                 divider = _random.Next(0, Convert.ToInt32(numberOfBits) - 2);
                 divider2 = _random.Next(divider, Convert.ToInt32(numberOfBits)-1);
@@ -576,21 +653,28 @@ namespace OE_Proj_1
                     secondIndividualToCross.chromosomeY[j] = temp;
                 }
 
-                population[i] = firstIndividualToCross;
-                ++i;
-                if (i < population.Length)
+
+
+                double random = _random.NextDouble();
+                if (random < crossPercentage && i >= 2)
                 {
-                    population[i] = secondIndividualToCross;
+                    population[i] = firstIndividualToCross.Clone();
+                    ++i;
+                    if (i < population.Length)
+                    {
+                        population[i] = secondIndividualToCross.Clone();
+                    }
+                    ++i;
                 }
             }
         }
 
         public void doHomoCrossover()
         {
-            for (int i = 4; i < population.Length; ++i)
+            for (int i = 2; i < population.Length;)
             {
-                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
-                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
+                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))].Clone();
+                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))].Clone();
 
                 for (int j = 0; j < firstIndividualToCross.chromosomeX.Length; ++j)
                 {
@@ -612,11 +696,17 @@ namespace OE_Proj_1
                     }
                 }
 
-                population[i] = firstIndividualToCross;
-                ++i;
-                if (i < population.Length)
+
+                double random = _random.NextDouble();
+                if (random < crossPercentage && i >= 2)
                 {
-                    population[i] = secondIndividualToCross;
+                    population[i] = firstIndividualToCross.Clone();
+                    ++i;
+                    if (i < population.Length)
+                    {
+                        population[i] = secondIndividualToCross.Clone();
+                    }
+                    ++i;
                 }
             }
         }
@@ -704,18 +794,6 @@ namespace OE_Proj_1
                 Individual temp = population[i];
                 population[i] = population[randomIndex];
                 population[randomIndex] = temp;
-            }
-        }
-
-        private void shufflePopulationToCross()
-        {
-            for (int i = 0; i < populationToCross.Length; ++i)
-            {
-                int randomIndex = _random.Next(0, i + 1);
-
-                Individual temp = populationToCross[i];
-                populationToCross[i] = populationToCross[randomIndex];
-                populationToCross[randomIndex] = temp;
             }
         }
 

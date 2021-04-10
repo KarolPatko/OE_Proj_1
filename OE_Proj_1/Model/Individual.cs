@@ -12,6 +12,7 @@ namespace OE_Proj_1.Model
         public bool[] chromosomeX;
         public bool[] chromosomeY;
         public double result;
+        public double distributor;
 
         private static int idIterator = 1;
 
@@ -23,6 +24,7 @@ namespace OE_Proj_1.Model
             ++idIterator;
             chromosomeX = randBoolArray(size);
             chromosomeY = randBoolArray(size);
+            distributor = 0;
         }
 
         public int CompareTo(object obj)
