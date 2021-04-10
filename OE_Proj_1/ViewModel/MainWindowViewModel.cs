@@ -4,7 +4,20 @@ namespace OE_Proj_1.ViewModel
 {
 
     using Model;
+    using System.Collections.ObjectModel;
 
+    public class Modell
+    {
+        public string Month { get; set; }
+
+        public double Target { get; set; }
+
+        public Modell(string xValue, double yValue)
+        {
+            Month = xValue;
+            Target = yValue;
+        }
+    }
     public class MainWindowViewModel// : INotifyPropertyChanged
     {
         private AlgorithmConfig config = AlgorithmConfig.Instance;
@@ -163,6 +176,19 @@ namespace OE_Proj_1.ViewModel
                     }
                 }*/
 
-
+        public ObservableCollection<Modell> Dataa
+        {
+            get
+            {
+                return new ObservableCollection<Modell>()
+        {
+            new Modell("Jan", 50),
+            new Modell("Feb", 70),
+            new Modell("Mar", 65),
+            new Modell("Apr", 57),
+            new Modell("May", 48),
+        }; ;
+            }
+        }
     }
 }

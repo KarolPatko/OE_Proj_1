@@ -1,12 +1,14 @@
 ﻿using OE_Proj_1.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace OE_Proj_1
 {
+
     public partial class MainWindow : Window
     {
         private AlgorithmConfig config = AlgorithmConfig.Instance;
@@ -156,8 +158,11 @@ namespace OE_Proj_1
         }
         private Individual[] population;
         private Individual[] populationToCross;
+        private Individual[] bestIndividuals = new Individual[2];
         private static Random _random = new Random();
-        public MainWindow()
+
+
+    public MainWindow()
         {
             InitializeComponent();
         }
@@ -177,11 +182,12 @@ namespace OE_Proj_1
             for (int i = 0; i < epochs; ++i)
             {
                 doEvaluate();
+                getBest();
                 doSelection();
                 doCrossover();
                 doMutatuion();
                 doInversion();
-                getBest();
+                rewriteBest();
             }
             ExampleAsync();
 
@@ -190,6 +196,10 @@ namespace OE_Proj_1
 
         public void getBest()
         {
+            Array.Sort(population);
+            bestIndividuals[0] = population[0].Clone();
+            bestIndividuals[1] = population[1].Clone();
+
             double min = population[0].result;
 
             for(int i = 0; i<population.Length; ++i)
@@ -258,7 +268,7 @@ namespace OE_Proj_1
                     doOnePointCrossover();
                     break;
                 case "TWO_POINT":
-                    doOnePointCrossover();
+                    doTwoPointCrossover();
                     break;
                 case "THREE_POINT":
                     doThreePointCrossover();
@@ -269,19 +279,18 @@ namespace OE_Proj_1
             }
         }
 
-        //Dodac prawdopodobienstwo, teraz mutuje zawsze
         public void doMutatuion()
         {
             switch (mutation)
             {
-                case "EDGE":
-                    doEdgeMutation();
-                    break;
                 case "ONE_POINT":
                     doOnePointMutation();
                     break;
                 case "TWO_POINT":
                     doOnePointMutation();
+                    break;
+                case "EDGE":
+                    doEdgeMutation();
                     break;
             }
         }
@@ -290,7 +299,7 @@ namespace OE_Proj_1
         {
             int pivot1;
             int pivot2;
-            for(int i = 0; i<population.Length; ++i)
+            for(int i = 2; i<population.Length; ++i)
             {
                 double random = _random.NextDouble();
                 if (random < inversionPercentage)
@@ -312,7 +321,7 @@ namespace OE_Proj_1
             Array.Sort(population);
             populationToCross = new Individual[Convert.ToInt32(Math.Floor(population.Length * (bestPercentageOrTournamentAmount * 1.0 / 100)))];
             for(int i = 0; i < (Math.Floor(population.Length * (bestPercentageOrTournamentAmount * 1.0 / 100))); ++i){
-                populationToCross[i] = population[i];
+                populationToCross[i] = population[i].Clone();
             }
         }
 
@@ -350,10 +359,11 @@ namespace OE_Proj_1
         public void doOnePointCrossover()
         {
             int divider;
-            for (int i = 0; i< population.Length;)
+
+            for (int i = 2; i< population.Length;)
             {
-                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length) -1)];
-                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length)-1)];
+                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length) -1)].Clone();
+                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length)-1)].Clone();
 
                 divider = _random.Next(0, Convert.ToInt32(numberOfBits));
 
@@ -374,13 +384,13 @@ namespace OE_Proj_1
                 }
 
                 double random = _random.NextDouble();
-                if (random < crossPercentage)
+                if (random < crossPercentage && i>=2)
                 {
-                    population[i] = firstIndividualToCross;
+                    population[i] = firstIndividualToCross.Clone();
                     ++i;
                     if (i < population.Length)
                     {
-                        population[i] = secondIndividualToCross;
+                        population[i] = secondIndividualToCross.Clone();
                     }
                     ++i;
                 }
@@ -391,7 +401,7 @@ namespace OE_Proj_1
         {
             int divider;
             int divider2;
-            for (int i = 0; i < population.Length; ++i)
+            for (int i = 2; i < population.Length; ++i)
             {
                 Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
                 Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
@@ -423,32 +433,6 @@ namespace OE_Proj_1
                     population[i] = secondIndividualToCross;
                 }
             }
-            /*
-            shufflePopulationToCross();
-            int[] dividers = { 0, 0 };
-            for (int i = 0; i < populationToCross.Length && i + 1 <= populationToCross.Length; i++)
-            {
-                dividers[0] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
-                dividers[1] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
-                Array.Sort(dividers);
-
-                while(dividers[0] == dividers[1])
-                {
-                    dividers[1] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
-                }
-
-                Array.Sort(dividers);
-
-                bool temp;
-                
-                for (int j = dividers[0]; j < dividers[1]; ++j)
-                {
-                    temp = populationToCross[i].chromosomeX[j];
-                    populationToCross[i].chromosomeX[j] = populationToCross[i].chromosomeY[j];
-                    populationToCross[i].chromosomeY[j] = temp;
-                }
-            }
-            */
         }
 
         public void doThreePointCrossover()
@@ -456,7 +440,7 @@ namespace OE_Proj_1
             int divider;
             int divider2;
             int divider3;
-            for (int i = 0; i < population.Length; ++i)
+            for (int i = 4; i < population.Length; ++i)
             {
                 Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
                 Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
@@ -504,46 +488,11 @@ namespace OE_Proj_1
                     population[i] = secondIndividualToCross;
                 }
             }
-            /*
-            shufflePopulationToCross();
-            int[] dividers = { 0, 0, 0 };
-            for (int i = 0; i < populationToCross.Length && i + 1 <= populationToCross.Length; i++)
-            {
-                dividers[0] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
-                dividers[1] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
-                dividers[2] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
-
-                while(new HashSet<int>(dividers).Count == dividers.Length)
-                {
-                    dividers[0] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
-                    dividers[1] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);
-                    dividers[2] = _random.Next(0, Convert.ToInt32(numberOfBits) + 1);   
-                }
-
-                Array.Sort(dividers);
-
-                bool temp;
-
-                for (int j = 0; j < dividers[0]; ++j)
-                {
-                    temp = populationToCross[i].chromosomeX[j];
-                    populationToCross[i].chromosomeX[j] = populationToCross[i].chromosomeY[j];
-                    populationToCross[i].chromosomeY[j] = temp;
-                }
-
-                for (int j = dividers[1]; j < dividers[2]; ++j)
-                {
-                    temp = populationToCross[i].chromosomeX[j];
-                    populationToCross[i].chromosomeX[j] = populationToCross[i].chromosomeY[j];
-                    populationToCross[i].chromosomeY[j] = temp;
-                }
-            }
-            */
         }
 
         public void doHomoCrossover()
         {
-            for (int i = 0; i < population.Length; ++i)
+            for (int i = 4; i < population.Length; ++i)
             {
                 Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
                 Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))];
@@ -575,30 +524,11 @@ namespace OE_Proj_1
                     population[i] = secondIndividualToCross;
                 }
             }
-            /*
-            //pobrać s z formularza, jak na razie fixed s = 0,25
-            double s = 0.25;
-            bool temp;
-
-            for (int i = 0; i < populationToCross.Length; i++)
-            {
-                for(int j = 0; j < populationToCross[i].chromosomeX.Length && j < populationToCross[i].chromosomeY.Length; ++j)
-                {
-                    double epsilon = _random.Next(0, 1);
-                    if(epsilon <= s)
-                    {
-                        temp = populationToCross[i].chromosomeX[j];
-                        populationToCross[i].chromosomeX[j] = populationToCross[i].chromosomeY[j];
-                        populationToCross[i].chromosomeY[j] = temp;
-                    }
-                }    
-            }
-            */
         }
 
         public void doEdgeMutation()
         {
-            for(int i = 0; i<population.Length; ++i)
+            for(int i = 2; i<population.Length; ++i)
             {
                 double random = _random.NextDouble();
                 if (random < mutationPercentage)
@@ -612,11 +542,11 @@ namespace OE_Proj_1
         public void doOnePointMutation()
         {
             int randomNumber;
-            for (int i = 0; i < population.Length; ++i)
+            for (int i = 2; i < population.Length; ++i)
             {
                 double random = _random.NextDouble();
 
-                if (random < mutationPercentage)
+                if (random < mutationPercentage && i >= 1)
                 {
                     randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
                     population[i].chromosomeX[randomNumber] = !population[i].chromosomeX[randomNumber];
@@ -629,7 +559,7 @@ namespace OE_Proj_1
         public void doTwoPointMutation()
         {
             int randomNumber;
-            for (int i = 0; i < population.Length; ++i)
+            for (int i = 2; i < population.Length; ++i)
             {
                 randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
                 population[i].chromosomeX[randomNumber] = !population[i].chromosomeX[randomNumber];
@@ -649,8 +579,7 @@ namespace OE_Proj_1
             int x = BoolArrayToInt(boolX);
             int y = BoolArrayToInt(boolY);
 
-            //tego m sie nie da policzyć ale jak to tutaj podstawię to działa zamiast tych logarytmów ¯\_(ツ)_/¯
-            double m = numberOfBits;//Math.Ceiling(Math.Log((a + b) * numberOfBits, 2) + Math.Log(1, 2));
+            double m = numberOfBits;
 
             double newX = a + x * (b - a) / (Math.Pow(2, m) - 1);
             double newY = a + y * (b - a) / (Math.Pow(2, m) - 1);
@@ -695,19 +624,10 @@ namespace OE_Proj_1
             }
         }
 
-        /*
-        private string ToBinaryString(double value)
+        public  void rewriteBest()
         {
-            const int bitCount = sizeof(double) * 8;
-            int intValue = System.BitConverter.ToInt32(BitConverter.GetBytes(value), 0);
-            return Convert.ToString(intValue, 2).PadLeft(bitCount, '0');
+            population[0] = bestIndividuals[0].Clone();
+            population[1] = bestIndividuals[1].Clone();
         }
-
-        private float FromBinaryString(string bstra)
-        {
-            int intValue = Convert.ToInt32(bstra, 2);
-            return BitConverter.ToSingle(BitConverter.GetBytes(intValue), 0);
-        }
-        */
     }
 }

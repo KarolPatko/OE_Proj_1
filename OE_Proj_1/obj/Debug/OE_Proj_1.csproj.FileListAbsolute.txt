@@ -30,3 +30,7 @@ C:\Users\Michal\source\repos\OE_Proj_1\OE_Proj_1\obj\Debug\OE_Proj_1.csproj.Gene
 C:\Users\Michal\source\repos\OE_Proj_1\OE_Proj_1\obj\Debug\OE_Proj_1.csproj.CoreCompileInputs.cache
 C:\Users\Michal\source\repos\OE_Proj_1\OE_Proj_1\obj\Debug\OE_Proj_1.exe
 C:\Users\Michal\source\repos\OE_Proj_1\OE_Proj_1\obj\Debug\OE_Proj_1.pdb
+C:\Workspace\Studia\OE\OE_Proj_1\OE_Proj_1\OE_Proj_1\bin\Debug\Syncfusion.Licensing.dll
+C:\Workspace\Studia\OE\OE_Proj_1\OE_Proj_1\OE_Proj_1\bin\Debug\Syncfusion.SfChart.WPF.dll
+C:\Workspace\Studia\OE\OE_Proj_1\OE_Proj_1\OE_Proj_1\bin\Debug\Syncfusion.SfChart.WPF.xml
+C:\Workspace\Studia\OE\OE_Proj_1\OE_Proj_1\OE_Proj_1\obj\Debug\OE_Proj_1.csproj.CopyComplete

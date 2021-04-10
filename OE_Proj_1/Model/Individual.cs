@@ -33,6 +33,17 @@ namespace OE_Proj_1.Model
             }
             throw new ArgumentException("Object is not a Individual");
         }
+
+        public Individual Clone()
+        {
+            Individual i = new Individual(this.chromosomeX.Length);
+            Array.Copy(this.chromosomeX, i.chromosomeX, this.chromosomeX.Length);
+            Array.Copy(this.chromosomeY, i.chromosomeY, this.chromosomeY.Length);
+            i.result = this.result;
+
+            return i;
+        }
+
         static bool[] randBoolArray(int size)
         {
 
