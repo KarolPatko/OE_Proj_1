@@ -162,7 +162,7 @@ namespace OE_Proj_1
         }
         private Individual[] population;
         private Individual[] populationToCross;
-        private Individual[] bestIndividuals = new Individual[2];
+        private Individual[] bestIndividuals;
         private static Random _random = new Random();
         public ObservableCollection<BestValueToEpoch> bestValueToEpoch
         {
@@ -261,6 +261,8 @@ namespace OE_Proj_1
             s = new double[Convert.ToInt32(epochs)];
 
             iterator = 0;
+
+            bestIndividuals = new Individual[Convert.ToInt32(eliteAmount)];
         }
 
         public void doEvaluate()
@@ -310,8 +312,10 @@ namespace OE_Proj_1
         public void getBest()
         {
             Array.Sort(population);
-            bestIndividuals[0] = population[0].Clone();
-            bestIndividuals[1] = population[1].Clone();
+            for(int i = 0; i<eliteAmount; ++i)
+            {
+                bestIndividuals[i] = population[i].Clone();
+            }
 
             double min = population[0].result;
 
@@ -402,7 +406,7 @@ namespace OE_Proj_1
         {
             int pivot1;
             int pivot2;
-            for(int i = 2; i<population.Length; ++i)
+            for(int i = Convert.ToInt32(eliteAmount); i<population.Length; ++i)
             {
                 double random = _random.NextDouble();
                 if (random < inversionPercentage)
@@ -502,18 +506,21 @@ namespace OE_Proj_1
         public void doTournamentSelection()
         {
             shufflePopulation();
-            populationToCross = new Individual[Convert.ToInt32(Math.Ceiling(population.Length/crossPercentage))];
+            
+            int populationToCrossLength = Convert.ToInt32(Math.Floor(population.Length * (bestPercentageOrTournamentAmount * 1.0 / 100)));
+            populationToCross = new Individual[populationToCrossLength];
+
             int populationToCrossIncrement = 0;
             Individual min;
-            for (int i = 0; i < population.Length; i += Convert.ToInt32(crossPercentage))
+            for (int i = 0; i < population.Length && populationToCrossIncrement < populationToCrossLength; i += Convert.ToInt32(Math.Floor(population.Length / populationToCrossLength * 1.0)))
             {
-                min = population[i];
+                min = population[i].Clone(); ;
 
-                for(int j = i+1; j < population.Length && j < i+ Convert.ToInt32(crossPercentage); ++j)
+                for(int j = i+1; j < population.Length && j < i+ Convert.ToInt32(Math.Floor(population.Length / populationToCrossLength * 1.0)); ++j)
                 {
                     if(min.result > population[j].result)
                     {
-                        min = population[j];
+                        min = population[j].Clone();
                     }
                 }
 
@@ -527,7 +534,7 @@ namespace OE_Proj_1
         {
             int divider;
 
-            for (int i = 2; i< population.Length;)
+            for (int i = Convert.ToInt32(eliteAmount); i< population.Length;)
             {
                 Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length) -1)].Clone();
                 Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length)-1)].Clone();
@@ -551,7 +558,7 @@ namespace OE_Proj_1
                 }
 
                 double random = _random.NextDouble();
-                if (random < crossPercentage && i>=2)
+                if (random < crossPercentage && i>= Convert.ToInt32(eliteAmount))
                 {
                     population[i] = firstIndividualToCross.Clone();
                     ++i;
@@ -568,7 +575,7 @@ namespace OE_Proj_1
         {
             int divider;
             int divider2;
-            for (int i = 2; i < population.Length;)
+            for (int i = Convert.ToInt32(eliteAmount); i < population.Length;)
             {
                 Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))].Clone();
                 Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))].Clone();
@@ -594,7 +601,7 @@ namespace OE_Proj_1
                 }
 
                 double random = _random.NextDouble();
-                if (random < crossPercentage && i >= 2)
+                if (random < crossPercentage && i >= Convert.ToInt32(eliteAmount))
                 {
                     population[i] = firstIndividualToCross.Clone();
                     ++i;
@@ -612,7 +619,7 @@ namespace OE_Proj_1
             int divider;
             int divider2;
             int divider3;
-            for (int i = 2; i < population.Length;)
+            for (int i = Convert.ToInt32(eliteAmount); i < population.Length;)
             {
                 Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))].Clone();
                 Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))].Clone();
@@ -656,7 +663,7 @@ namespace OE_Proj_1
 
 
                 double random = _random.NextDouble();
-                if (random < crossPercentage && i >= 2)
+                if (random < crossPercentage && i >= eliteAmount)
                 {
                     population[i] = firstIndividualToCross.Clone();
                     ++i;
@@ -671,7 +678,7 @@ namespace OE_Proj_1
 
         public void doHomoCrossover()
         {
-            for (int i = 2; i < population.Length;)
+            for (int i = Convert.ToInt32(eliteAmount); i < population.Length;)
             {
                 Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))].Clone();
                 Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))].Clone();
@@ -698,7 +705,7 @@ namespace OE_Proj_1
 
 
                 double random = _random.NextDouble();
-                if (random < crossPercentage && i >= 2)
+                if (random < crossPercentage && i >= Convert.ToInt32(eliteAmount))
                 {
                     population[i] = firstIndividualToCross.Clone();
                     ++i;
@@ -713,7 +720,7 @@ namespace OE_Proj_1
 
         public void doEdgeMutation()
         {
-            for(int i = 2; i<population.Length; ++i)
+            for(int i = Convert.ToInt32(eliteAmount); i<population.Length; ++i)
             {
                 double random = _random.NextDouble();
                 if (random < mutationPercentage)
@@ -727,7 +734,7 @@ namespace OE_Proj_1
         public void doOnePointMutation()
         {
             int randomNumber;
-            for (int i = 2; i < population.Length; ++i)
+            for (int i = Convert.ToInt32(eliteAmount); i < population.Length; ++i)
             {
                 double random = _random.NextDouble();
 
@@ -744,7 +751,7 @@ namespace OE_Proj_1
         public void doTwoPointMutation()
         {
             int randomNumber;
-            for (int i = 2; i < population.Length; ++i)
+            for (int i = Convert.ToInt32(eliteAmount); i < population.Length; ++i)
             {
                 randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
                 population[i].chromosomeX[randomNumber] = !population[i].chromosomeX[randomNumber];
@@ -799,8 +806,10 @@ namespace OE_Proj_1
 
         public  void rewriteBest()
         {
-            population[0] = bestIndividuals[0].Clone();
-            population[1] = bestIndividuals[1].Clone();
+            for (int i = 0; i < eliteAmount; ++i)
+            {
+                population[i] = bestIndividuals[i].Clone();
+            }
         }
 
         public void fillCharts()
