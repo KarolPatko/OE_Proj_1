@@ -182,8 +182,6 @@ namespace OE_Proj_1
         private double[] bb;
         private double[] sr;
         private double[] s;
-        private double[] bbx;
-        private double[] bby;
         private static int iterator = 0;
 
         public void calculate(object sender, RoutedEventArgs e)
@@ -197,10 +195,6 @@ namespace OE_Proj_1
 
             initialize();
 
-            //TODO delete
-            bbx = new double[Convert.ToInt32(epochs)];
-            bby = new double[Convert.ToInt32(epochs)];
-
             for (int i = 0; i < epochs; ++i)
             {
                 doEvaluate();
@@ -213,8 +207,9 @@ namespace OE_Proj_1
                 rewriteBest();
             }
             fillCharts();
-            ExampleAsync();
+
             stopwatch.Start();
+
             TimeSpan ts = stopwatch.Elapsed;
             string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
                 ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
@@ -343,27 +338,6 @@ namespace OE_Proj_1
             ++iterator;
         }
 
-        //TODO delete
-        public void ExampleAsync()
-        {
-            string abc = "";
-            for(int i =0; i<epochs; ++i)
-            {
-                abc += bb[i] + " " + bbx[i] + " " + bby[i] + "\n";
-            }
-            string[] hg = new string[2];
-            hg[0] = abc;
-
-            string a = "";
-            for(int i=0; i<config.bestValueToEpoch.Count; ++i)
-            {
-                a += " " + config.bestValueToEpoch[i].Best + "|"+ config.bestValueToEpoch[i].Epoch;
-            }
-            hg[1] = a;
-
-            File.WriteAllLines("WriteLines.txt", hg);
-        }
-
         public void doSelection()
         {
             switch (selection)
@@ -421,7 +395,7 @@ namespace OE_Proj_1
             int pivot2;
             for(int i = Convert.ToInt32(eliteAmount); i<population.Length; ++i)
             {
-                double random = _random.NextDouble();
+                double random = _random.NextDouble() * 100;
                 if (random < inversionPercentage)
                 {
                     pivot1 = _random.Next(0, Convert.ToInt32(numberOfBits) - 1);
@@ -570,7 +544,7 @@ namespace OE_Proj_1
                     secondIndividualToCross.chromosomeY[j] = temp;
                 }
 
-                double random = _random.NextDouble();
+                double random = _random.NextDouble() * 100;
                 if (random < crossPercentage && i>= Convert.ToInt32(eliteAmount))
                 {
                     population[i] = firstIndividualToCross.Clone();
@@ -613,7 +587,7 @@ namespace OE_Proj_1
                     secondIndividualToCross.chromosomeY[j] = temp;
                 }
 
-                double random = _random.NextDouble();
+                double random = _random.NextDouble() * 100;
                 if (random < crossPercentage && i >= Convert.ToInt32(eliteAmount))
                 {
                     population[i] = firstIndividualToCross.Clone();
@@ -675,8 +649,8 @@ namespace OE_Proj_1
 
 
 
-                double random = _random.NextDouble();
-                if (random < crossPercentage && i >= eliteAmount)
+                double random = _random.NextDouble() * 100;
+                if (random < crossPercentage && i >= Convert.ToInt32(eliteAmount))
                 {
                     population[i] = firstIndividualToCross.Clone();
                     ++i;
@@ -717,7 +691,7 @@ namespace OE_Proj_1
                 }
 
 
-                double random = _random.NextDouble();
+                double random = _random.NextDouble() * 100;
                 if (random < crossPercentage && i >= Convert.ToInt32(eliteAmount))
                 {
                     population[i] = firstIndividualToCross.Clone();
@@ -735,7 +709,7 @@ namespace OE_Proj_1
         {
             for(int i = Convert.ToInt32(eliteAmount); i<population.Length; ++i)
             {
-                double random = _random.NextDouble();
+                double random = _random.NextDouble() * 100;
                 if (random < mutationPercentage)
                 {
                     population[i].chromosomeX[Convert.ToInt32(numberOfBits) - 1] = !population[i].chromosomeX[Convert.ToInt32(numberOfBits) - 1];
@@ -749,7 +723,7 @@ namespace OE_Proj_1
             int randomNumber;
             for (int i = Convert.ToInt32(eliteAmount); i < population.Length; ++i)
             {
-                double random = _random.NextDouble();
+                double random = _random.NextDouble() * 100;
 
                 if (random < mutationPercentage && i >= 1)
                 {
@@ -766,15 +740,20 @@ namespace OE_Proj_1
             int randomNumber;
             for (int i = Convert.ToInt32(eliteAmount); i < population.Length; ++i)
             {
-                randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
-                population[i].chromosomeX[randomNumber] = !population[i].chromosomeX[randomNumber];
-                randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
-                population[i].chromosomeX[randomNumber] = !population[i].chromosomeX[randomNumber];
+                double random = _random.NextDouble() * 100;
 
-                randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
-                population[i].chromosomeY[randomNumber] = !population[i].chromosomeY[randomNumber];
-                randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
-                population[i].chromosomeY[randomNumber] = !population[i].chromosomeY[randomNumber];
+                if (random < mutationPercentage && i >= 1)
+                {
+                    randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
+                    population[i].chromosomeX[randomNumber] = !population[i].chromosomeX[randomNumber];
+                    randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
+                    population[i].chromosomeX[randomNumber] = !population[i].chromosomeX[randomNumber];
+
+                    randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
+                    population[i].chromosomeY[randomNumber] = !population[i].chromosomeY[randomNumber];
+                    randomNumber = _random.Next(0, Convert.ToInt32(numberOfBits));
+                    population[i].chromosomeY[randomNumber] = !population[i].chromosomeY[randomNumber];
+                }
             }
         }
 
