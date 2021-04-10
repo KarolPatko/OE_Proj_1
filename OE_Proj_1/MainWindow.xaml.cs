@@ -184,16 +184,22 @@ namespace OE_Proj_1
 
         public void calculate(object sender, RoutedEventArgs e)
         {
+            iterator = 0;
+            setError();
+            if(config.error != "")
+            {
+                return;
+            }
             initialize();
             bb = new double[Convert.ToInt32(epochs)];
             sr = new double[Convert.ToInt32(epochs)];
             s = new double[Convert.ToInt32(epochs)];
             bbx = new double[Convert.ToInt32(epochs)];
             bby = new double[Convert.ToInt32(epochs)];
-            iterator = 0;
             for (int i = 0; i < epochs; ++i)
             {
                 doEvaluate();
+                saveIteration(i);
                 getBest();
                 doSelection();
                 doCrossover();
@@ -206,6 +212,90 @@ namespace OE_Proj_1
 
 
 
+        }
+
+        public void setError()
+        {
+            config.error = "";
+            if (a > b)
+            {
+                double temp = b;
+                b = a;
+                a = temp;
+            }
+
+            if(numberOfBits <= 0)
+            {
+                config.error += "Liczba bitów musi być większa od 0/n";
+            }
+
+            if (numberOfBits >= 31)
+            {
+                config.error += "Liczba bitów musi być mniejsza lub równa 31/n";
+            }
+
+            if (populationAmount < 2)
+            {
+                config.error += "Populacja musi być większa niż 2/n";
+            }
+
+            if (epochs <= 0)
+            {
+                config.error += "Liczba epok musi być większa od zera/n";
+            }
+        }
+
+        public void initialize()
+        {
+            population = new Individual[Convert.ToInt32(populationAmount)];
+
+            int chromosomeLength = Convert.ToInt32(numberOfBits);
+            for (int i = 0; i < populationAmount; ++i)
+            {
+                population[i] = new Individual(chromosomeLength);
+            }
+
+            string[] empty = new string[1];
+            empty[0] = "";
+            File.WriteAllLines("iterations.txt", empty);
+        }
+
+        public void doEvaluate()
+        {
+            double sum = 0;
+            for (int i = 0; i < population.Length; ++i)
+            {
+                population[i].result = f(population[i].chromosomeX, population[i].chromosomeY);
+                sum += population[i].result;
+            }
+            sr[iterator] = sum / population.Length;
+            sum = 0;
+            for (int i = 0; i < population.Length; ++i)
+            {
+                sum += Math.Pow(population[i].result * sr[iterator], 2);
+            }
+            s[iterator] = Math.Sqrt(sum / population.Length);
+        }
+
+        public void saveIteration(int i)
+        {
+            string[] iterationInfo = {"" + i};
+            File.AppendAllLines("iterations.txt", iterationInfo);
+
+            string[] individualInfo = new string[3];
+            for(int j = 0; j<population.Length; ++j)
+            {
+                individualInfo[1] = "";
+                individualInfo[2] = "";
+                for (int k = 0; k< population[j].chromosomeX.Length; ++k)
+                {
+                    individualInfo[1] += population[j].chromosomeX[k] ? "1" : "0";
+                    individualInfo[2] += population[j].chromosomeY[k] ? "1" : "0";
+                }
+                individualInfo[0] = " " + population[j].result;
+                string[] info = { individualInfo[1] + " " + individualInfo[2] + individualInfo[0] };
+                File.AppendAllLines("iterations.txt", info);
+            }
         }
 
         public void getBest()
@@ -246,33 +336,8 @@ namespace OE_Proj_1
 
             File.WriteAllLines("WriteLines.txt", hg);
         }
-        public void initialize()
-        {
-            population = new Individual[Convert.ToInt32(populationAmount)];
 
-            int chromosomeLength = Convert.ToInt32(numberOfBits);
-            for (int i = 0; i < populationAmount; ++i)
-            {
-                population[i] = new Individual(chromosomeLength);
-            }
-        }
 
-        public void doEvaluate()
-        {
-            double sum = 0;
-            for(int i=0; i<population.Length; ++i)
-            {
-                population[i].result = f(population[i].chromosomeX, population[i].chromosomeY);
-                sum += population[i].result;
-            }
-            sr[iterator] = sum / population.Length;
-            sum = 0;
-            for (int i = 0; i < population.Length; ++i)
-            {
-                sum += Math.Pow(population[i].result * sr[iterator], 2);
-            }
-            s[iterator] = Math.Sqrt(sum / population.Length);
-        }
 
         public void doSelection()
         {

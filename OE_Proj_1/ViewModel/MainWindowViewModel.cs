@@ -147,6 +147,13 @@ namespace OE_Proj_1.ViewModel
                 config.crossover = value.Replace("System.Windows.Controls.ComboBoxItem: ", "");
             }
         }
+        public string error
+        {
+            get
+            {
+                return config.error;
+            }
+        }
         public double crossPercentage
         {
             get

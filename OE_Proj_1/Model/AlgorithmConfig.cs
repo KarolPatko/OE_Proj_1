@@ -22,6 +22,7 @@ namespace OE_Proj_1.Model
         public string crossover { get; set; }
         public string mutation { get; set; }
         public double crossPercentage { get; set; }
+        public string error { get; set; }
         public double mutationPercentage { get; set; }
         public ObservableCollection<BestValueToEpoch> bestValueToEpoch { get; set; }
         public ObservableCollection<BestValueToEpoch> avgValueToEpoch { get; set; }

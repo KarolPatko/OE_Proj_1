@@ -98,6 +98,6 @@
             <chart:LineSeries ItemsSource="{Binding sValueToEpoch}" XBindingPath="Epoch" YBindingPath="Best" Margin="0,0,-79.6,-0.2"/>
 
         </chart:SfChart>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="180,460,0,0" VerticalAlignment="Top" Width="75"/>
+        <TextBlock HorizontalAlignment="Left" Margin="58,476,0,0" TextWrapping="Wrap" Text="{Binding error}" VerticalAlignment="Top" Height="183" Width="223"/>
     </Grid>
 </Window>
