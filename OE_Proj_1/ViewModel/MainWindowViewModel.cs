@@ -2,31 +2,25 @@
 
 namespace OE_Proj_1.ViewModel
 {
-
+    using Microsoft.Win32;
     using Model;
+    using Newtonsoft.Json;
+    using Syncfusion.UI.Xaml.Charts;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Drawing;
     using System.IO;
     using System.Windows;
+    using System.Windows.Media;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Windows.Media.Imaging;
     using static OE_Proj_1.Model.AlgorithmConfig;
 
-    public class Modell
-    {
-        public string Month { get; set; }
-
-        public double Target { get; set; }
-
-        public Modell(string xValue, double yValue)
-        {
-            Month = xValue;
-            Target = yValue;
-        }
-    }
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private AlgorithmConfig config = AlgorithmConfig.Instance;
-
-
 
         public double a
         {
@@ -187,25 +181,11 @@ namespace OE_Proj_1.ViewModel
         }
         public string time { get; set; }
 
-        public ObservableCollection<Modell> Dataa
-        {
-            get
-            {
-                return new ObservableCollection<Modell>()
-        {
-            new Modell("Jan", 50),
-            new Modell("Feb", 70),
-            new Modell("Mar", 65),
-            new Modell("Apr", 57),
-            new Modell("May", 48),
-        }; 
-            }
-        }
 
-       public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public void onPropertyChanged(string propertyName){
-            if(PropertyChanged != null)
+        public void onPropertyChanged(string propertyName) {
+            if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
@@ -246,6 +226,7 @@ namespace OE_Proj_1.ViewModel
             }
         }
 
+
         public void refresh(string ts)
         {
             onPropertyChanged(nameof(sValueToEpoch));
@@ -254,6 +235,93 @@ namespace OE_Proj_1.ViewModel
             time = "Time: " + ts;
             onPropertyChanged(nameof(time));
         }
+
+        public void generateChart()
+        {
+            SfChart schart = App.Current.Windows[0].FindName("sValueToEpochChart") as SfChart;
+            schart.Visibility = Visibility.Visible;
+            schart.Save("charts/sChart.png");
+            schart.Visibility = Visibility.Hidden;
+
+            schart = App.Current.Windows[0].FindName("bestValueToEpochChart") as SfChart;
+            schart.Visibility = Visibility.Visible;
+            schart.Save("charts/bestChart.png");
+            schart.Visibility = Visibility.Hidden;
+
+            schart = App.Current.Windows[0].FindName("avgValueToEpochChart") as SfChart;
+            schart.Visibility = Visibility.Visible;
+            schart.Save("charts/avgChart.png");
+            schart.Visibility = Visibility.Hidden;
+        }
+
+        public void S(SfChart schart)
+        {
+            String filename = "abc.png";
+            int screenLeft = (int)SystemParameters.VirtualScreenLeft;
+            int screenTop= (int)SystemParameters.VirtualScreenTop;
+            int screenWidth= (int)SystemParameters.VirtualScreenWidth;
+            int screenHeight= (int)SystemParameters.VirtualScreenHeight;
+
+            Bitmap bm = new Bitmap(screenWidth, screenHeight);
+            Graphics g = Graphics.FromImage(bm);
+
+            g.CopyFromScreen(screenLeft, screenTop, 0, 0, bm.Size);
+
+            bm.Save(filename);
+
+            string path = Environment.GetEnvironmentVariable("Path");
+            string[] pathArray = path.Split(';');
+            string python = "";
+            foreach (string p in pathArray)
+            {
+                string[] files;
+                try
+                {
+                    files = Directory.GetFiles(p);
+                }
+                catch (Exception e)
+                {
+                    break;
+                }
+
+                foreach (string file in files)
+                {
+                    if (file == p + "python.exe")
+                    {
+                        python = p + "python.exe";
+                    }
+                }
+            }
+
+            var psi = new ProcessStartInfo();
+            python.Replace("\\", "\\\\");
+            psi.FileName = python;
+
+            var script = @"C:\Workspace\pythonProject\main.py";
+            var a = 'a';
+            var sss = JsonConvert.SerializeObject(sValueToEpoch);
+            psi.Arguments = $"\"{script}\" \"{sss}\"";
+
+            psi.UseShellExecute = false;
+            psi.CreateNoWindow = true;
+            psi.RedirectStandardOutput = true;
+            psi.RedirectStandardError = true;
+
+            var error = "";
+            var res = "";
+            using (var process = Process.Start(psi))
+            {
+                error = process.StandardError.ReadToEnd();
+                res = process.StandardOutput.ReadToEnd();
+            }
+
+            string[] s = new string[1];
+            s[0] = res;
+            File.WriteAllText("s.txt", error+"|"+s[0]);
+            
+
+        }
+
 
         public void refreshError(string newError)
         {

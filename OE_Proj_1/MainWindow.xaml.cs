@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using static OE_Proj_1.Model.AlgorithmConfig;
 
+
 namespace OE_Proj_1
 {
 
@@ -214,6 +215,11 @@ namespace OE_Proj_1
             string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
                 ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
             ViewModel.refresh(elapsedTime);
+        }
+
+        public void generateChart(object sender, RoutedEventArgs e)
+        {
+            ViewModel.generateChart();
         }
 
         public void setError()
