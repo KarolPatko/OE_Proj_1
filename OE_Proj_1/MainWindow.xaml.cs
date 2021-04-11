@@ -235,10 +235,13 @@ namespace OE_Proj_1
 
             if (a == b) config.error += "Przedział nie może być pusty\n";
             if (numberOfBits <= 0) config.error += "Liczba bitów musi być większa od 0\n";
-            if (numberOfBits >= 31) config.error += "Liczba bitów musi być mniejsza lub równa 31\n";
+            if (numberOfBits >= 31) config.error += "Liczba bitów musi być mniejsza lub równa 63\n";
             if (populationAmount < 2) config.error += "Populacja musi być większa niż 2\n";
             if (epochs <= 0) config.error += "Liczba epok musi być większa od zera\n";
-            if(crossPercentage == 0) crossPercentage = 10;
+            populationAmount = Convert.ToInt32(Math.Ceiling(populationAmount));
+            if (crossPercentage == 0) crossPercentage = 10;
+            if (selection == "BEST" && bestPercentageOrTournamentAmount > 100) bestPercentageOrTournamentAmount = 100;
+            if (selection == "TOURNAMENT" && bestPercentageOrTournamentAmount > 100) bestPercentageOrTournamentAmount = populationAmount;
         }
 
         public void initialize()
@@ -344,6 +347,9 @@ namespace OE_Proj_1
                     break;
                 case "ROULETTE":
                     doRouletteSelection();
+                    break;
+                default:
+                    doBestSelection();
                     break;
             }
         }
@@ -989,8 +995,8 @@ namespace OE_Proj_1
         //MIN f(x,y)=-1,9133 (x, y)=(-0.54719, -0.54719)
         public double f(bool[] boolX, bool[] boolY)
         {
-            int x = BoolArrayToInt(boolX);
-            int y = BoolArrayToInt(boolY);
+            long x = BoolArrayToInt(boolX);
+            long y = BoolArrayToInt(boolY);
 
             double m = numberOfBits;
 
@@ -1000,14 +1006,14 @@ namespace OE_Proj_1
             return Math.Sin(newX + newY) + (newX - newY) * (newX - newY) - 1.5 * newX + 2.5 * newY + 1;
         }
 
-        static int BoolArrayToInt(bool[] arr)
+        static long BoolArrayToInt(bool[] arr)
         {
-            if (arr.Length > 31)
+            if (arr.Length > 63)
             {
                 throw new ApplicationException("Too many elements to be converted to a single int");
             }
 
-            int val = 0;
+            long val = 0;
             for (int i = 0; i < arr.Length; ++i)
                 if (arr[i]) val |= 1 << i;
             return val;
