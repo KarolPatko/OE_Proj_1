@@ -235,7 +235,7 @@ namespace OE_Proj_1
 
             if (a == b) config.error += "Przedział nie może być pusty\n";
             if (numberOfBits <= 0) config.error += "Liczba bitów musi być większa od 0\n";
-            if (numberOfBits >= 31) config.error += "Liczba bitów musi być mniejsza lub równa 63\n";
+            if (numberOfBits >= 63) config.error += "Liczba bitów musi być mniejsza lub równa 63\n";
             if (populationAmount < 2) config.error += "Populacja musi być większa niż 2\n";
             if (epochs <= 0) config.error += "Liczba epok musi być większa od zera\n";
             populationAmount = Convert.ToInt32(Math.Ceiling(populationAmount));
@@ -258,7 +258,7 @@ namespace OE_Proj_1
             //initialize file with iterations
             string[] empty = new string[1];
             empty[0] = "";
-            File.WriteAllLines("iterations.txt", empty);
+            File.WriteAllLines("charts/iterations.txt", empty);
 
             //initialize arrays to save values
             bb = new double[Convert.ToInt32(epochs)];
@@ -310,7 +310,7 @@ namespace OE_Proj_1
                 }
                 individualInfo[0] = " " + population[j].result;
                 string[] info = { individualInfo[1] + " " + individualInfo[2] + individualInfo[0] };
-                File.AppendAllLines("iterations.txt", info);
+                File.AppendAllLines("charts/iterations.txt", info);
             }
         }
 
