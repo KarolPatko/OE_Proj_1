@@ -233,25 +233,12 @@ namespace OE_Proj_1
                 a = temp;
             }
 
-            if(numberOfBits <= 0)
-            {
-                config.error += "Liczba bitów musi być większa od 0\n";
-            }
-
-            if (numberOfBits >= 31)
-            {
-                config.error += "Liczba bitów musi być mniejsza lub równa 31\n";
-            }
-
-            if (populationAmount < 2)
-            {
-                config.error += "Populacja musi być większa niż 2\n";
-            }
-
-            if (epochs <= 0)
-            {
-                config.error += "Liczba epok musi być większa od zera\n";
-            }
+            if (a == b) config.error += "Przedział nie może być pusty\n";
+            if (numberOfBits <= 0) config.error += "Liczba bitów musi być większa od 0\n";
+            if (numberOfBits >= 31) config.error += "Liczba bitów musi być mniejsza lub równa 31\n";
+            if (populationAmount < 2) config.error += "Populacja musi być większa niż 2\n";
+            if (epochs <= 0) config.error += "Liczba epok musi być większa od zera\n";
+            if(crossPercentage == 0) crossPercentage = 10;
         }
 
         public void initialize()
@@ -736,7 +723,14 @@ namespace OE_Proj_1
             for (int i = Convert.ToInt32(eliteAmount); i < population.Length;)
             {
                 Individual firstIndividualToCross = populationToCross[i].Clone();
-                Individual secondIndividualToCross = populationToCross[i+1].Clone();
+                Individual secondIndividualToCross;
+                if (i + 1 < population.Length) {
+                    secondIndividualToCross = populationToCross[i + 1].Clone();
+                }
+                else
+                {
+                    secondIndividualToCross = populationToCross[i].Clone();
+                }
 
                 divider = _random.Next(0, Convert.ToInt32(numberOfBits));
 
@@ -777,7 +771,15 @@ namespace OE_Proj_1
             for (int i = Convert.ToInt32(eliteAmount); i < population.Length;)
             {
                 Individual firstIndividualToCross = populationToCross[i].Clone();
-                Individual secondIndividualToCross = populationToCross[i+1].Clone();
+                Individual secondIndividualToCross;
+                if (i + 1 < population.Length)
+                {
+                    secondIndividualToCross = populationToCross[i + 1].Clone();
+                }
+                else
+                {
+                    secondIndividualToCross = populationToCross[i].Clone();
+                }
 
                 divider = _random.Next(0, Convert.ToInt32(numberOfBits) - 1);
                 divider2 = _random.Next(divider, Convert.ToInt32(numberOfBits));
@@ -821,7 +823,15 @@ namespace OE_Proj_1
             for (int i = Convert.ToInt32(eliteAmount); i < population.Length;)
             {
                 Individual firstIndividualToCross = populationToCross[i].Clone();
-                Individual secondIndividualToCross = populationToCross[i+1].Clone();
+                Individual secondIndividualToCross;
+                if (i + 1 < population.Length)
+                {
+                    secondIndividualToCross = populationToCross[i + 1].Clone();
+                }
+                else
+                {
+                    secondIndividualToCross = populationToCross[i].Clone();
+                }
 
                 divider = _random.Next(0, Convert.ToInt32(numberOfBits) - 2);
                 divider2 = _random.Next(divider, Convert.ToInt32(numberOfBits) - 1);
@@ -880,7 +890,15 @@ namespace OE_Proj_1
             for (int i = Convert.ToInt32(eliteAmount); i < population.Length;)
             {
                 Individual firstIndividualToCross = populationToCross[i].Clone();
-                Individual secondIndividualToCross = populationToCross[i+1].Clone();
+                Individual secondIndividualToCross;
+                if (i + 1 < population.Length)
+                {
+                    secondIndividualToCross = populationToCross[i + 1].Clone();
+                }
+                else
+                {
+                    secondIndividualToCross = populationToCross[i].Clone();
+                }
 
                 for (int j = 0; j < firstIndividualToCross.chromosomeX.Length; ++j)
                 {
