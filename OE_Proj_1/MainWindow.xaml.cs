@@ -295,7 +295,7 @@ namespace OE_Proj_1
             sum = 0;
             for (int i = 0; i < population.Length; ++i)
             {
-                sum += Math.Pow(population[i].result * sr[iterator], 2);
+                sum += Math.Pow(population[i].result - sr[iterator], 2);
             }
             s[iterator] = Math.Sqrt(sum / population.Length);
         }

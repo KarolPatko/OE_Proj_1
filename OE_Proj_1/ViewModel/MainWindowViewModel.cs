@@ -181,7 +181,6 @@ namespace OE_Proj_1.ViewModel
         }
         public string time { get; set; }
 
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void onPropertyChanged(string propertyName) {
@@ -233,14 +232,6 @@ namespace OE_Proj_1.ViewModel
             onPropertyChanged(nameof(bestValueToEpoch));
             onPropertyChanged(nameof(avgValueToEpoch));
             time = "Time: " + ts;
-            onPropertyChanged(nameof(time));
-        }
-        public void clear()
-        {
-            onPropertyChanged(nameof(sValueToEpoch));
-            onPropertyChanged(nameof(bestValueToEpoch));
-            onPropertyChanged(nameof(avgValueToEpoch));
-            time = "Time:";
             onPropertyChanged(nameof(time));
         }
 
