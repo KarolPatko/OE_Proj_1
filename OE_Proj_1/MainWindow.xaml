@@ -106,7 +106,7 @@
                 <chart:NumericalAxis/>
             </chart:SfChart.SecondaryAxis>
 
-            <chart:LineSeries ItemsSource="{Binding Path=bestValueToEpoch, Mode=TwoWay}" XBindingPath="Epoch" YBindingPath="Best" Margin="0,10,-21.6,-9.6"/>
+            <chart:LineSeries ItemsSource="{Binding Path=bestValueToEpoch, Mode=TwoWay}" XBindingPath="Epoch" YBindingPath="Best" Margin="0,0,-21.6,0.4"/>
 
         </chart:SfChart>
         <chart:SfChart Name="avgValueToEpochChart" HorizontalAlignment="Left" Width="610" Height="250" VerticalAlignment="Top" Margin="0,0,33.8,0" Visibility="Hidden">
@@ -118,7 +118,7 @@
                 <chart:NumericalAxis/>
             </chart:SfChart.SecondaryAxis>
 
-            <chart:LineSeries ItemsSource="{Binding Path=avgValueToEpoch, Mode=TwoWay}" XBindingPath="Epoch" YBindingPath="Best" Margin="0,10,-21.6,-9.6"/>
+            <chart:LineSeries ItemsSource="{Binding Path=avgValueToEpoch, Mode=TwoWay}" XBindingPath="Epoch" YBindingPath="Best" Margin="0,0,-21.6,0.4"/>
 
         </chart:SfChart>
         <chart:SfChart Name="sValueToEpochChart" HorizontalAlignment="Left" Width="610" Height="250" VerticalAlignment="Top" Margin="0,0,33.8,0" Visibility="Hidden">
@@ -130,7 +130,7 @@
                 <chart:NumericalAxis/>
             </chart:SfChart.SecondaryAxis>
 
-            <chart:LineSeries ItemsSource="{Binding Path=sValueToEpoch, Mode=TwoWay}" XBindingPath="Epoch" YBindingPath="Best" Margin="0,10,-21.6,-9.6"/>
+            <chart:LineSeries ItemsSource="{Binding Path=sValueToEpoch, Mode=TwoWay}" XBindingPath="Epoch" YBindingPath="Best" Margin="0,0,-21.6,0.4"/>
 
         </chart:SfChart>
     </Grid>
