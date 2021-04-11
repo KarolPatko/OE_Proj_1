@@ -64,7 +64,7 @@
                 <chart:NumericalAxis/>
             </chart:SfChart.SecondaryAxis>
 
-            <chart:LineSeries ItemsSource="{Binding Path=bestValueToEpoch, Mode=TwoWay}" XBindingPath="Epoch" YBindingPath="Best" Margin="0,10,-21.6,-9.6"/>
+            <chart:LineSeries ItemsSource="{Binding Path=bestValueToEpoch, Mode=TwoWay}" XBindingPath="Epoch" YBindingPath="Best" Margin="0,0,1.4,0.4"/>
 
         </chart:SfChart>
         <chart:SfChart Margin="0,12,9.8,0" HorizontalAlignment="Left" Width="644" Height="250" >

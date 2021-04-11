@@ -363,6 +363,7 @@ namespace OE_Proj_1
 
         public void doCrossover()
         {
+            if (selection == "ROULETTE") return;
             switch (crossover)
             {
                 case "ONE_POINT":
@@ -428,10 +429,7 @@ namespace OE_Proj_1
         }
 
         public void doRouletteSelection()
-        {
-
-
-
+        { 
             double min = population[0].result;
             double max = population[0].result;
             for (int i = 0; i< population.Length; ++i)
@@ -475,7 +473,7 @@ namespace OE_Proj_1
             }
             population[population.Length - 1].distributor = 1;
 
-            int populationToCrossLength = Convert.ToInt32(Math.Floor(population.Length * (bestPercentageOrTournamentAmount * 1.0 / 100)));
+            int populationToCrossLength = population.Length;
             populationToCross = new Individual[populationToCrossLength];
 
             double random = _random.NextDouble();
@@ -496,6 +494,22 @@ namespace OE_Proj_1
                 {
                     populationToCross[i] = population[0].Clone();
                 }
+            }
+
+            switch (crossover)
+            {
+                case "ONE_POINT":
+                    doOnePointCrossoverForRoulette();
+                    break;
+                case "TWO_POINT":
+                    doTwoPointCrossoverForRoulette();
+                    break;
+                case "THREE_POINT":
+                    doThreePointCrossoverForRoulette();
+                    break;
+                case "HOMO":
+                    doHomoCrossoverForRoulette();
+                    break;
             }
 
         }
@@ -715,6 +729,193 @@ namespace OE_Proj_1
             }
         }
 
+        public void doOnePointCrossoverForRoulette()
+        {
+            int divider;
+
+            for (int i = Convert.ToInt32(eliteAmount); i < population.Length;)
+            {
+                Individual firstIndividualToCross = populationToCross[i].Clone();
+                Individual secondIndividualToCross = populationToCross[i+1].Clone();
+
+                divider = _random.Next(0, Convert.ToInt32(numberOfBits));
+
+                for (int j = divider; j < firstIndividualToCross.chromosomeX.Length; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeX[j];
+                    firstIndividualToCross.chromosomeX[j] = secondIndividualToCross.chromosomeX[j];
+                    secondIndividualToCross.chromosomeX[j] = temp;
+                }
+
+                divider = _random.Next(0, Convert.ToInt32(numberOfBits));
+
+                for (int j = divider; j < firstIndividualToCross.chromosomeY.Length; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeY[j];
+                    firstIndividualToCross.chromosomeY[j] = secondIndividualToCross.chromosomeY[j];
+                    secondIndividualToCross.chromosomeY[j] = temp;
+                }
+
+                double random = _random.NextDouble() * 100;
+                if (random < crossPercentage && i >= Convert.ToInt32(eliteAmount))
+                {
+                    population[i] = firstIndividualToCross.Clone();
+                    ++i;
+                    if (i < population.Length)
+                    {
+                        population[i] = secondIndividualToCross.Clone();
+                    }
+                    ++i;
+                }
+            }
+        }
+
+        public void doTwoPointCrossoverForRoulette()
+        {
+            int divider;
+            int divider2;
+            for (int i = Convert.ToInt32(eliteAmount); i < population.Length;)
+            {
+                Individual firstIndividualToCross = populationToCross[i].Clone();
+                Individual secondIndividualToCross = populationToCross[i+1].Clone();
+
+                divider = _random.Next(0, Convert.ToInt32(numberOfBits) - 1);
+                divider2 = _random.Next(divider, Convert.ToInt32(numberOfBits));
+
+                for (int j = divider; j < divider2; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeX[j];
+                    firstIndividualToCross.chromosomeX[j] = secondIndividualToCross.chromosomeX[j];
+                    secondIndividualToCross.chromosomeX[j] = temp;
+                }
+
+                divider = _random.Next(0, Convert.ToInt32(numberOfBits) - 1);
+                divider2 = _random.Next(divider, Convert.ToInt32(numberOfBits));
+
+                for (int j = divider; j < divider2; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeY[j];
+                    firstIndividualToCross.chromosomeY[j] = secondIndividualToCross.chromosomeY[j];
+                    secondIndividualToCross.chromosomeY[j] = temp;
+                }
+
+                double random = _random.NextDouble() * 100;
+                if (random < crossPercentage && i >= Convert.ToInt32(eliteAmount))
+                {
+                    population[i] = firstIndividualToCross.Clone();
+                    ++i;
+                    if (i < population.Length)
+                    {
+                        population[i] = secondIndividualToCross.Clone();
+                    }
+                    ++i;
+                }
+            }
+        }
+
+        public void doThreePointCrossoverForRoulette()
+        {
+            int divider;
+            int divider2;
+            int divider3;
+            for (int i = Convert.ToInt32(eliteAmount); i < population.Length;)
+            {
+                Individual firstIndividualToCross = populationToCross[i].Clone();
+                Individual secondIndividualToCross = populationToCross[i+1].Clone();
+
+                divider = _random.Next(0, Convert.ToInt32(numberOfBits) - 2);
+                divider2 = _random.Next(divider, Convert.ToInt32(numberOfBits) - 1);
+                divider3 = _random.Next(divider2, Convert.ToInt32(numberOfBits));
+
+                for (int j = divider; j < divider2; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeX[j];
+                    firstIndividualToCross.chromosomeX[j] = secondIndividualToCross.chromosomeX[j];
+                    secondIndividualToCross.chromosomeX[j] = temp;
+                }
+
+                for (int j = divider3; j < firstIndividualToCross.chromosomeX.Length; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeX[j];
+                    firstIndividualToCross.chromosomeX[j] = secondIndividualToCross.chromosomeX[j];
+                    secondIndividualToCross.chromosomeX[j] = temp;
+                }
+
+                divider = _random.Next(0, Convert.ToInt32(numberOfBits) - 2);
+                divider2 = _random.Next(divider, Convert.ToInt32(numberOfBits) - 1);
+                divider3 = _random.Next(divider2, Convert.ToInt32(numberOfBits));
+
+                for (int j = divider; j < divider2; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeY[j];
+                    firstIndividualToCross.chromosomeY[j] = secondIndividualToCross.chromosomeY[j];
+                    secondIndividualToCross.chromosomeY[j] = temp;
+                }
+
+                for (int j = divider3; j < firstIndividualToCross.chromosomeY.Length; ++j)
+                {
+                    bool temp = firstIndividualToCross.chromosomeY[j];
+                    firstIndividualToCross.chromosomeY[j] = secondIndividualToCross.chromosomeY[j];
+                    secondIndividualToCross.chromosomeY[j] = temp;
+                }
+
+
+
+                double random = _random.NextDouble() * 100;
+                if (random < crossPercentage && i >= Convert.ToInt32(eliteAmount))
+                {
+                    population[i] = firstIndividualToCross.Clone();
+                    ++i;
+                    if (i < population.Length)
+                    {
+                        population[i] = secondIndividualToCross.Clone();
+                    }
+                    ++i;
+                }
+            }
+        }
+
+        public void doHomoCrossoverForRoulette()
+        {
+            for (int i = Convert.ToInt32(eliteAmount); i < population.Length;)
+            {
+                Individual firstIndividualToCross = populationToCross[i].Clone();
+                Individual secondIndividualToCross = populationToCross[i+1].Clone();
+
+                for (int j = 0; j < firstIndividualToCross.chromosomeX.Length; ++j)
+                {
+                    if (j % 2 == 0)
+                    {
+                        bool temp = firstIndividualToCross.chromosomeX[j];
+                        firstIndividualToCross.chromosomeX[j] = secondIndividualToCross.chromosomeX[j];
+                        secondIndividualToCross.chromosomeX[j] = temp;
+                    }
+                }
+
+                for (int j = 0; j < firstIndividualToCross.chromosomeY.Length; ++j)
+                {
+                    if (j % 2 == 0)
+                    {
+                        bool temp = firstIndividualToCross.chromosomeY[j];
+                        firstIndividualToCross.chromosomeY[j] = secondIndividualToCross.chromosomeY[j];
+                        secondIndividualToCross.chromosomeY[j] = temp;
+                    }
+                }
+
+
+                double random = _random.NextDouble() * 100;
+                if (random < crossPercentage && i >= Convert.ToInt32(eliteAmount))
+                {
+                    population[i] = firstIndividualToCross.Clone();
+                    ++i;
+                    if (i < population.Length)
+                    {
+                        population[i] = secondIndividualToCross.Clone();
+                    }
+                    ++i;
+                }
+            }
+        }
         public void doEdgeMutation()
         {
             for(int i = Convert.ToInt32(eliteAmount); i<population.Length; ++i)
