@@ -429,6 +429,9 @@ namespace OE_Proj_1
 
         public void doRouletteSelection()
         {
+
+
+
             double min = population[0].result;
             double max = population[0].result;
             for (int i = 0; i< population.Length; ++i)
