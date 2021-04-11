@@ -235,6 +235,14 @@ namespace OE_Proj_1.ViewModel
             time = "Time: " + ts;
             onPropertyChanged(nameof(time));
         }
+        public void clear()
+        {
+            onPropertyChanged(nameof(sValueToEpoch));
+            onPropertyChanged(nameof(bestValueToEpoch));
+            onPropertyChanged(nameof(avgValueToEpoch));
+            time = "Time:";
+            onPropertyChanged(nameof(time));
+        }
 
         public void generateChart()
         {

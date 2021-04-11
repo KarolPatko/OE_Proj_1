@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using static OE_Proj_1.Model.AlgorithmConfig;
@@ -136,7 +137,6 @@ namespace OE_Proj_1
                 config.mutation = value.Replace("System.Windows.Controls.ComboBoxItem: ", "");
             }
         }
-
         public string crossover
         {
             get
@@ -187,6 +187,7 @@ namespace OE_Proj_1
 
         public void calculate(object sender, RoutedEventArgs e)
         {
+
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
@@ -500,16 +501,16 @@ namespace OE_Proj_1
         {
             shufflePopulation();
             
-            int populationToCrossLength = Convert.ToInt32(Math.Floor(population.Length * (bestPercentageOrTournamentAmount * 1.0 / 100)));
+            int populationToCrossLength = Convert.ToInt32(Math.Floor(population.Length / (bestPercentageOrTournamentAmount * 1.0)));
             populationToCross = new Individual[populationToCrossLength];
 
             int populationToCrossIncrement = 0;
             Individual min;
-            for (int i = 0; i < population.Length && populationToCrossIncrement < populationToCrossLength; i += Convert.ToInt32(Math.Floor(population.Length / populationToCrossLength * 1.0)))
+            for (int i = 0; i < population.Length && populationToCrossIncrement < populationToCrossLength; i += Convert.ToInt32(bestPercentageOrTournamentAmount))
             {
-                min = population[i].Clone(); ;
+                min = population[i].Clone();
 
-                for(int j = i+1; j < population.Length && j < i+ Convert.ToInt32(Math.Floor(population.Length / populationToCrossLength * 1.0)); ++j)
+                for(int j = i+1; j < population.Length && j < i+ Convert.ToInt32(bestPercentageOrTournamentAmount) ; ++j)
                 {
                     if(min.result > population[j].result)
                     {
@@ -529,8 +530,8 @@ namespace OE_Proj_1
 
             for (int i = Convert.ToInt32(eliteAmount); i< population.Length;)
             {
-                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length) -1)].Clone();
-                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length)-1)].Clone();
+                Individual firstIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))].Clone();
+                Individual secondIndividualToCross = populationToCross[_random.Next(0, Convert.ToInt32(populationToCross.Length))].Clone();
 
                 divider = _random.Next(0, Convert.ToInt32(numberOfBits));
 
