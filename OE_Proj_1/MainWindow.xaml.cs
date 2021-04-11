@@ -296,7 +296,7 @@ namespace OE_Proj_1
             //epoch
             //chromosomeX chromosomeY value | for each individual in population
             string[] iterationInfo = {"" + i};
-            File.AppendAllLines("iterations.txt", iterationInfo);
+            File.AppendAllLines("charts/iterations.txt", iterationInfo);
 
             string[] individualInfo = new string[3];
             for(int j = 0; j<population.Length; ++j)
