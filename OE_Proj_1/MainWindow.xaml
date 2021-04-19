@@ -16,45 +16,39 @@
     <Grid Margin="0,0,-6,0.4">
         <TextBox HorizontalAlignment="Left" Height="23" Margin="786,11,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding a}"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="786,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding b}"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="786,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding numberOfBits}"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="786,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding populationAmount}"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="786,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding epochs}"/>
-        <ComboBox HorizontalAlignment="Left" Margin="786,292,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding selection}">
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="786,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding populationAmount}"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="786,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding epochs}"/>
+        <ComboBox HorizontalAlignment="Left" Margin="786,235,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding selection}">
             <ComboBoxItem Content="BEST"/>
             <ComboBoxItem Content="ROULETTE"/>
             <ComboBoxItem Content="TOURNAMENT"/>
         </ComboBox>
         <TextBlock HorizontalAlignment="Left" Margin="699,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Begin of range" TextAlignment="Right" Width="82"/>
         <TextBlock HorizontalAlignment="Left" Margin="699,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="End of range" TextAlignment="Right" Width="82"/>
-        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="675,96,0,0" TextWrapping="Wrap" Text="Population amount" VerticalAlignment="Top" Width="106"/>
-        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="697,68,0,0" TextWrapping="Wrap" Text="Number of bits" VerticalAlignment="Top" Width="84"/>
-        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="675,126,0,0" TextWrapping="Wrap" Text="Number of epochs" VerticalAlignment="Top" Width="106"/>
-        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="688,292,0,0" TextWrapping="Wrap" Text="Selection method" VerticalAlignment="Top"/>
-        <Button Content="Calculate" HorizontalAlignment="Left" Margin="831,373,0,0" VerticalAlignment="Top" Width="75" Click="calculate"/>
-        <Button Content="Generate Chart" HorizontalAlignment="Left" Margin="786,397,0,0" VerticalAlignment="Top" Width="120" Click="generateChart" Height="19"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="786,208,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding crossPercentage}"/>
-        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="689,209,0,0" TextWrapping="Wrap" Text="Cross percentage" VerticalAlignment="Top"/>
-        <ComboBox HorizontalAlignment="Left" Margin="786,319,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding crossover}">
-            <ComboBoxItem Content="ONE_POINT"/>
-            <ComboBoxItem Content="TWO_POINT"/>
-            <ComboBoxItem Content="THREE_POINT"/>
-            <ComboBoxItem Content="HOMO"/>
+        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="675,68,0,0" TextWrapping="Wrap" Text="Population amount" VerticalAlignment="Top" Width="106"/>
+        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="675,98,0,0" TextWrapping="Wrap" Text="Number of epochs" VerticalAlignment="Top" Width="106"/>
+        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="688,235,0,0" TextWrapping="Wrap" Text="Selection method" VerticalAlignment="Top"/>
+        <Button Content="Calculate" HorizontalAlignment="Left" Margin="831,316,0,0" VerticalAlignment="Top" Width="75" Click="calculate"/>
+        <Button Content="Generate Chart" HorizontalAlignment="Left" Margin="786,340,0,0" VerticalAlignment="Top" Width="120" Click="generateChart" Height="19"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="786,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding crossPercentage}"/>
+        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="689,181,0,0" TextWrapping="Wrap" Text="Cross percentage" VerticalAlignment="Top"/>
+        <ComboBox HorizontalAlignment="Left" Margin="786,262,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding crossover}">
+            <ComboBoxItem Content="ARITHMETIC"/>
+            <ComboBoxItem Content="HEURISTIC"/>
         </ComboBox>
-        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="729,320,0,0" TextWrapping="Wrap" Text="Crossover" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="786,236,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding mutationPercentage}"/>
-        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="670,238,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Mutation percentage"/>
-        <ComboBox HorizontalAlignment="Left" Margin="786,346,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding mutation}">
-            <ComboBoxItem Content="ONE_POINT"/>
-            <ComboBoxItem Content="TWO_POINT"/>
-            <ComboBoxItem Content="EDGE" />
+        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="729,263,0,0" TextWrapping="Wrap" Text="Crossover" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="786,208,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding mutationPercentage}"/>
+        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="670,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Mutation percentage"/>
+        <ComboBox HorizontalAlignment="Left" Margin="786,289,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding mutation}">
+            <ComboBoxItem Content="EVEN"/>
+            <ComboBoxItem Content="INDEX_SWAP"/>
+            <ComboBoxItem Content="GAUSS" />
         </ComboBox>
-        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="729,347,0,0" TextWrapping="Wrap" Text="Mutation" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="786,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding bestPercentageOrTournamentAmount}"/>
-        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="626,153,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155"><Run Text="Best / Tournament "/><Run Text="%"/></TextBlock>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="786,264,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding inversionPercentage}"/>
-        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="670,264,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Inversion"/><Run Text=" percentage"/></TextBlock>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="786,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding eliteAmount}"/>
-        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="708,182,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="73"><Run Text="Elite "/><Run Text="amount"/></TextBlock>
+        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="729,290,0,0" TextWrapping="Wrap" Text="Mutation" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="786,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding bestPercentageOrTournamentAmount}"/>
+        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="626,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155"><Run Text="Best / Tournament "/><Run Text="%"/></TextBlock>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="786,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding eliteAmount}"/>
+        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="708,154,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="73"><Run Text="Elite "/><Run Text="amount"/></TextBlock>
         <chart:SfChart HorizontalAlignment="Left" Width="610" Height="250" VerticalAlignment="Top" Margin="0,0,33.8,0">
             <chart:SfChart.PrimaryAxis>
                 <chart:NumericalAxis/>
@@ -93,8 +87,8 @@
             <chart:LineSeries ItemsSource="{Binding Path=sValueToEpoch, Mode=TwoWay}" XBindingPath="Epoch" YBindingPath="Best" Margin="0,0,-6.2,0.4"/>
 
         </chart:SfChart>
-        <TextBlock Foreground="red"  HorizontalAlignment="Left" Margin="683,442,0,0" TextWrapping="Wrap" Text="{Binding error}" VerticalAlignment="Top" Height="189" Width="223"/>
-        <TextBlock HorizontalAlignment="Left" Margin="683,421,0,0" TextWrapping="Wrap" Text="{Binding time}" VerticalAlignment="Top" Width="223"/>
+        <TextBlock Foreground="red"  HorizontalAlignment="Left" Margin="683,385,0,0" TextWrapping="Wrap" Text="{Binding error}" VerticalAlignment="Top" Height="189" Width="223"/>
+        <TextBlock HorizontalAlignment="Left" Margin="683,364,0,0" TextWrapping="Wrap" Text="{Binding time}" VerticalAlignment="Top" Width="223"/>
         <chart:SfAreaSparkline HorizontalAlignment="Left" Height="100" Margin="-394,85,0,0" VerticalAlignment="Top" Width="100"/>
 
         <chart:SfChart Name="bestValueToEpochChart" HorizontalAlignment="Left" Width="610" Height="250" VerticalAlignment="Top" Margin="0,0,33.8,0" Visibility="Hidden">

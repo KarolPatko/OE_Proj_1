@@ -9,8 +9,10 @@ namespace OE_Proj_1.Model
     class Individual : IComparable
     {
         public int id;
-        public bool[] chromosomeX;
-        public bool[] chromosomeY;
+        public static double a;
+        public static double b;
+        public double chromosomeX;
+        public double chromosomeY;
         public double result;
         public double distributor;
 
@@ -18,12 +20,14 @@ namespace OE_Proj_1.Model
 
         private static Random _random = new Random();
 
-        public Individual(int size)
+        public Individual(double a, double b)
         {
             id = idIterator;
             ++idIterator;
-            chromosomeX = randBoolArray(size);
-            chromosomeY = randBoolArray(size);
+            chromosomeX = _random.NextDouble() * (b-a) + a;
+            chromosomeY = _random.NextDouble() * (b - a) + a;
+            Individual.a = a;
+            Individual.b = b;
             distributor = 0;
         }
 
@@ -38,41 +42,12 @@ namespace OE_Proj_1.Model
 
         public Individual Clone()
         {
-            Individual i = new Individual(this.chromosomeX.Length);
-            Array.Copy(this.chromosomeX, i.chromosomeX, this.chromosomeX.Length);
-            Array.Copy(this.chromosomeY, i.chromosomeY, this.chromosomeY.Length);
+            Individual i = new Individual(a, b);
+            i.chromosomeX = this.chromosomeX;
+            i.chromosomeY = this.chromosomeY;
             i.result = this.result;
 
             return i;
-        }
-
-        static bool[] randBoolArray(int size)
-        {
-
-            bool[] ret = new bool[size];
-            for (int i = 0; i < size; ++i)
-            {
-                ret[i] = _random.Next() % 2 == 0 ? false : true;
-            }
-            return ret;
-        }
-
-        override public string ToString()
-        {
-            string ret = "";
-
-            for(int i = 0; i < chromosomeX.Length; ++i)
-            {
-                ret += chromosomeX[i] ? "1" : "0";
-            }
-            ret += " ";
-            for (int i = 0; i < chromosomeY.Length; ++i)
-            {
-                ret += chromosomeY[i] ? "1" : "0";
-            }
-            ret += " | ";
-
-            return ret;
         }
     }
 }
