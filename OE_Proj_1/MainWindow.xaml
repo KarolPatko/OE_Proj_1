@@ -39,12 +39,6 @@
         <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="729,263,0,0" TextWrapping="Wrap" Text="Crossover" VerticalAlignment="Top"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="786,208,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding mutationPercentage}"/>
         <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="670,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Mutation percentage"/>
-        <ComboBox HorizontalAlignment="Left" Margin="786,289,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding mutation}">
-            <ComboBoxItem Content="EVEN"/>
-            <ComboBoxItem Content="INDEX_SWAP"/>
-            <ComboBoxItem Content="GAUSS" />
-        </ComboBox>
-        <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="729,290,0,0" TextWrapping="Wrap" Text="Mutation" VerticalAlignment="Top"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="786,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding bestPercentageOrTournamentAmount}"/>
         <TextBlock TextAlignment="Right" HorizontalAlignment="Left" Margin="626,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155"><Run Text="Best / Tournament "/><Run Text="%"/></TextBlock>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="786,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding eliteAmount}"/>

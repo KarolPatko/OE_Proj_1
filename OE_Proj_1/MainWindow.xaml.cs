@@ -112,17 +112,6 @@ namespace OE_Proj_1
                 config.selection = value.Replace("System.Windows.Controls.ComboBoxItem: ", "");
             }
         }
-        public string mutation
-        {
-            get
-            {
-                return config.mutation;
-            }
-            set
-            {
-                config.mutation = value.Replace("System.Windows.Controls.ComboBoxItem: ", "");
-            }
-        }
         public string crossover
         {
             get
@@ -732,21 +721,7 @@ namespace OE_Proj_1
 
         public void doMutatuion()
         {
-            switch (mutation)
-            {
-                case "EVEN":
-                    doEvenCrossover();
-                    break;
-                case "INDEX_SWAP":
-                    doIndexSwapCrossover();
-                    break;
-                case "GAUSS":
-                    doGaussCrossover();
-                    break;
-                default:
-                    doEvenCrossover();
-                    break;
-            }
+            doEvenCrossover();
         }
 
         public void doEvenCrossover() {
@@ -765,52 +740,6 @@ namespace OE_Proj_1
                     else{
                         rand = _random.NextDouble() * (b - a) + a;
                         population[i].chromosomeY = rand;
-                    }
-                }
-            }
-        }
-        public void doIndexSwapCrossover()
-        {
-            for (int i = 0; i < population.Length; ++i)
-            {
-                double rand = _random.Next(0, 100);
-
-                if (rand < mutationPercentage)
-                {
-                    double temp = population[i].chromosomeX;
-                    population[i].chromosomeX = population[i].chromosomeY;
-                    population[i].chromosomeY = temp;
-                }
-            }
-        }
-        public void doGaussCrossover()
-        {
-            for (int i = 0; i < population.Length; ++i)
-            {
-                double rand = _random.Next(0, 100);
-
-                if (rand < mutationPercentage)
-                {
-                    double u1= 1.0 - _random.NextDouble();
-                    double u2 = 1.0 - _random.NextDouble();
-                    double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
-                    double randNormal = sr[iterator] + s[iterator] - randStdNormal;
-                    population[i].chromosomeX += randNormal;
-
-                    if(population[i].chromosomeX < a || population[i].chromosomeX > b)
-                    {
-                        population[i].chromosomeX = _random.NextDouble() * (b - a) + a;
-                    }
-
-                    u1 = 1.0 - _random.NextDouble();
-                    u2 = 1.0 - _random.NextDouble();
-                    randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
-                    randNormal = sr[iterator] + s[iterator] - randStdNormal;
-                    population[i].chromosomeY += randNormal;
-
-                    if (population[i].chromosomeY < a || population[i].chromosomeY > b)
-                    {
-                        population[i].chromosomeY = _random.NextDouble() * (b - a) + a;
                     }
                 }
             }
